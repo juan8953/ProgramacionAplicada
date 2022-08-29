@@ -6,7 +6,6 @@ así como repasar los conceptos e introducir nuevas herramientas.
 # Recordatorio, el archivo lo deben subir a su repositorio en la fecha indicada.
 #Trabajado con Maria Alejandra Leyton, Alber Jose Muñoz y Juan David Panadero
 ## 1. Persistencia (1.0)
-l_paises = ['Colombia','Mexico','Turquía','Polonia','serbia','dinamarca','holada','Alemania']
 #TODO: escriba un programa que le permina escribir de manera automatica los nombres de estos paises en un archivo txt
 #NOTA: todos los nombres deben tener una mayuscula al comienzo
 #el archivo se ecuentra en formato csv
