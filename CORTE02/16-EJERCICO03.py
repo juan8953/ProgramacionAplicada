@@ -17,7 +17,12 @@ se les darán multiples funciones, así como la documentación correspondiente
 #   Si la pareja de conejos produce una nueva pareja cada mes y la nueva pareja
 #   tarda un mes más en ser también productiva, ¿cuántos pares de conejos podrá
 #   poner a la venta el granjero al cabo de un año?
-
+def f_contarconejos(parejas):
+    if parejas<2:#condicion para saber si los conejos empiezan desde dos
+        return parejas #se imprime el unico conejo
+    parejas_tot= f_contarconejos(parejas-1)+f_contarconejos(parejas-2)#la serie para la operacion de fibonacci
+    return parejas_tot #muestra las parejas totales
+print(f_contarconejos(10)) 
 ## Ejercicio objetos.
 # TODO: 1. Cree un archivo, Taller donde llevará acabo el codigo principal
 #       crear una lista de vehiculos que se encuentran en el taller en ese momento que tienen asociados: fecha de entrega, costo, modelo, año y dueño
