@@ -47,6 +47,14 @@ def f_contar(s_num,s_objeto,s_pasos): # se inicia la función, esta debe tener 2
         return s_num # finalmetne cuando se cumple la condición se retorna el valor final
 print(f_contar(1,12,2))
 ## Torre de Hanoi
+def Torre(ficha,A1,B2,C3):
+    if ficha ==1: #Estblecemos la sumatoria de una ficha a otra como es 1,2,3....
+        print("la ficha se movera a ",A1,B2) #Aca Imprimiremos la ubicacion de la ficha de A1 a B2
+        return #mientras colocamos una ficha a un espacio vacio colocamos otra ficha un espacio con fichas mayores a esta
+    Torre(ficha - 1,A1,B2,C3) #Dentro de esta funcion lo que intentaremos hacer sera la ficha puesta le contaremos como le restaremos la ubicacion de cada una de estas
+    print("la ficha ",ficha,"se movera ",A1 ,"a",C3) #Aca Imprimiremos el dialogo de como se movera de ubicacion la ficha 
+    Torre(ficha - 1,C3,B2,A1)#Dentro de esta funcion lo que intentaremos hacer sera la ficha puesta le contaremos como le restaremos la ubicaci pero teniendo en cuenta como esta estara alrevez
+Torre(3,"A1","B2","C3") #Dentro de este ubicaremos el numero de fichas  jugar y la ubicacion a las uales las fichas se moveran en las que estan definidas como A1,B2,C3
 '''
 existen problemas que son por naturaleza recursivos, un ejemplo de estos es la torre de hanoi 
 https://www.youtube.com/watch?v=vrXue8Lq1Ow&ab_channel=EdukativeS.L.-Rob%C3%B3ticaEducativaeningl%C3%A9s
