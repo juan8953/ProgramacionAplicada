@@ -12,6 +12,19 @@ se les darán multiples funciones, así como la documentación correspondiente
 # ejercicios tomados de: https://elvex.ugr.es/decsai/java/pdf/7D-Ejercicios.pdf
 
 #TODO: Demuestre por inducción que, para todo n mayor o igual que 4, n!>2^n
+def f_induccion(int_num):
+    if int_num>=4:
+        fact=1
+        while int_num>1:
+            fact*=int_num
+            int_num-=1
+        if fact>2**int_num:
+            print("La induccion se cumple con ese numero")
+            return
+    else:
+        print("el numero asignado no cumple la induccion")
+        return
+print(f_induccion(7))
 
 #TODO: Un granjero ha comprado una pareja de conejos para criarlos y luego venderlos.
 #   Si la pareja de conejos produce una nueva pareja cada mes y la nueva pareja
