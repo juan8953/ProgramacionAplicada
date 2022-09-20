@@ -52,4 +52,124 @@ print(f_contarconejos(10))
 #       Encontrar un vehiculo a partir de su dueño y determinar si está en el taller
 # TODO: 3 Todas las funciones que implemente deben estar en un script distinto al principal y donde se definen sus clases
 #       NOTA - (la UNICA exepción son las funciones que definen dentro de sus clases.)
+class Vehiculo():
 
+    fechaEntrega = "" # definicion de los parametros y lo que se manejara del tipo  pecha de entrega se recibira como una cadena de caracteres
+    costo = 0.0 #el costo se manejara como un punto flotante
+    modelo = "" # el modelo se manejara como una cadena de caracteres
+    anio = 0 # el año se manejara como un entero
+    duenio = None # y el dueño va a depender de lo ingresado
+
+    def _init_(self, fechaEntrega, costo, modelo, anio, duenio):#aqui se inicia la funcion en la que se van a definir los caracteres immplementados en la funcion
+        self.fechaEntrega = fechaEntrega # el parametro de fecha de entrega sera igual al valor ingresado como fecha de entrega
+        self.costo = costo # el parametro de fecha de entrega sera igual al valor ingresado como fecha de entrega
+        self.modelo = modelo #el parametro de modelo sera igual al valor ingresado como modelo
+        self.anio = anio # el parametro de anio sera igual al valor ingresado como anio
+        self.duenio = duenio # el parametro del dueño sera igual al valor ingresado como duenio
+        
+    def informacion(self, fechaEntrega, costo, modelo, anio, duenio):#esta es la fucnión con la que se va a imprimir la informacion (el valor de los parametros) 
+     '''
+     a contincion se utiliza el print para imprimir lo que se muestra en la linea siguiente en este caso cada uno de los parametros
+     en los que se usa el self para identificar que se establando de los parametros de la misma clase vehiculo 
+     '''
+        print
+        self.fechaEntrega
+        print
+        self.costo
+        print
+        self.modelo
+        print
+        self.anio
+        print
+        self.duenio
+mustang = vehiculo()
+mustang.fechaEntrega = '13/09/2022'
+mustang.costo= '200000000'
+mustang.modelo = 'match 1'
+mustang.anio = '1969'
+mustang.duenio = 'Samuel'
+mustang.print_information(mustang.d_delivery,mustang.cost,mustang.model,mustang.year,mustang.owner) 
+
+class Caja(): #e inicia la clase de la caja 
+    dineroTotal = 0.0 # la cual contara con el parametro de el dinero total el cual se manejara como un punto flotante 
+    movimientos = [] # y los movimientos los cuales se manejran como una lista 
+    def _init_(self, dineroTotal): #la funcion para definicion de los marametros 
+        self.dineroTotal = dineroTotal 
+
+    def pagarEmpleados(self, empleados): # funcion para la accion de pagar a los empleados 
+        totalAPagar = 0.0# los parametros utilizados el total a pagar el cual se manejara en punto flotante
+        i = 0# i que sera una variable contadora inicializada en 0
+        while i < len(empleados):# inicia un bucle para recorrer a los empleados 
+            totalAPagar += empleados[i].salario # a cada empleado se le tiene q pagar el valor de salario por lo que este valor se le sumara al total a pagar 
+            i+=1 # hecho este procedimiento se le añade i a la variable contadora para que siga recorriendo a los empleados 
+        if(self.dineroTotal >= totalAPagar): # se abre el condciona ya que si el valor del paramatro de la clase ejecutada dinerototal en mayor al valor al total a pagar 
+            self.dineroTotal -= totalAPagar # se descontara el valor a pagar de dinerototal
+            return True
+        return False
+
+    def ingresarDinero(self, dineroIngresado):# se fefine la funcion de ingresar el dinero 
+        self.dineroTotal += dineroIngresado # se agrega el dinero que esta ingresando al dinero total 
+  class GestionVehiculos():# se inicia la clase de gestion de vehiculos 
+    vehiculos = [] #el parametro utilizado en esta funcion sera implemetado como una lista en la cual se almacenaran los vehiculos  
+
+    def _init_(self, vehiculos):#la funcio en la que se definene los parammetros
+        self.vehiculos = vehiculos
+
+    def ingresarVehiculo(self, vehiculo, cantidadEmpleados):# funcion para ingresar vehiculos 
+        if(len(self.vehiculos)<cantidadEmpleados):# si la cantidad de vehiculos es menor a la cantidad de empleados 
+            self.vehiculos.append(vehiculo)#los vehiculos 
+            return True
+        return False
+
+    def sacarVehiculo(self, vehiculo):
+        if(len(self.vehiculos)>0):
+            if(vehiculo in self.vehiculos):
+                self.vehiculos.remove(vehiculo)
+                return True
+        return False
+ class GestionEmpleado():
+    empleados = []
+
+    def _init_(self, empleados):
+        self.empleados = empleados
+
+    def buscarEmpleado(self, documento):
+        print("falta")
+
+    def contratarEmpleado(self, empleado):
+        self.empleados.append(empleado)
+        return True
+
+
+    def despedirEmpleado(self, empleado):
+        if(len(self.empleados) > 0):
+            self.empleados.remove(empleado)
+            return True
+        return False
+       
+from Vehiculo import Vehiculo
+
+
+class Empleado():
+    nombre = ""
+    cargo = ""
+    salario = 0.0
+    vehiculo = None
+    documento = 0
+
+    def _init_(self, nombre, cargo, salario, vehiculo, documento):
+        self.nombre = nombre
+        self.cargo = cargo
+        self.salario = salario
+        self.vehiculo = vehiculo
+        self.documento = documento
+        
+from Vehiculo import Vehiculo
+
+class Cliente():
+    nombre = ""
+    documento = 0
+
+    def _init_(self, nombre, documento):
+        self.nombre = nombre
+        self.documento = documento
