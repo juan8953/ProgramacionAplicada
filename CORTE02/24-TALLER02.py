@@ -55,7 +55,9 @@ la siguiente sección se debe realizar en un archivo distinto llamado TALLER02-2
 #TODO: validad la encriptación de los archivos (0.2)
 #TODO: validar la decriptación de archivos (0.2)
 #TODO: validar la converción a diccionario (0.2)
-#Trabajamos con Alejandra Leyton
+
+#Trabajamos con Alejandra Leyton, Samuel Tamara, Juan Lozano, Kenneth Gomez 
+
 def busqueda_secuencial(n, lista):
     for i in range(0, len(lista)):
         if lista[i] == (n):
