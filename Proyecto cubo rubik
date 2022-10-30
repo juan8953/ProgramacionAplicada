@@ -1,0 +1,574 @@
+#print(a#1=rojo 2=azul 3=amarillo 4=naranja 5=verde 6=blanco
+import pprint
+cubobase =dict(up= [[6, 6, 6],
+               [6, 6, 6],
+               [6, 6, 6]],
+           front= [[1, 1, 1],
+                   [1, 1, 1],
+                   [1, 1, 1]],
+           left= [[5, 5, 5],
+                 [5, 5, 5],
+                 [5, 5, 5]],
+           rigth= [[2, 2, 2],
+                  [2, 2, 2],
+                  [2, 2, 2]],
+           back= [[4, 4, 4],
+                 [4, 4, 4],
+                 [4, 4, 4]],
+           down= [[3, 3, 3],
+                 [3, 3, 3],
+                 [3, 3, 3]])
+cubo =dict(up= [[6,6,6],
+             [6,6,6],
+             [6,6,6]],
+           front= [[1,1,1],
+           [1,1,1],
+           [3,1,1]],
+           left= [[5,5,5],
+            [5,5,5],
+            [1,5,5]],
+           rigth= [[2,2,2],
+           [2,2,2],
+           [3,2,3]],
+           back= [[4,4,4],
+              [4,4,4],
+              [2,4,3]],
+           down= [[4,3,5],
+               [3,3,3],
+               [2,3,4]])
+def rotacara_contrarelo(cara):
+    pos1 = cara[0][0]
+    pos2 = cara[0][1]
+    pos3 = cara[0][2]
+    pos4 = cara[1][0]
+    pos5 = cara[1][2]
+    pos6 = cara[2][0]
+    pos7 = cara[2][1]
+    pos8 = cara[2][2]
+    pos9 = cara[1][1]
+    cara[0][0] = pos3
+    cara[0][1] = pos5
+    cara[0][2] = pos8
+    cara[1][0] = pos2
+    cara[1][2] = pos7
+    cara[2][0] = pos1
+    cara[2][1] = pos4
+    cara[2][2] = pos6
+    cara[1][1] = pos9
+    return cara
+
+
+def rotacara_relo(cara):
+    pos1 = cara[0][0]
+    pos2 = cara[0][1]
+    pos3 = cara[0][2]
+    pos4 = cara[1][0]
+    pos5 = cara[1][2]
+    pos6 = cara[2][0]
+    pos7 = cara[2][1]
+    pos8 = cara[2][2]
+    pos9 = cara[1][1]
+    cara[0][0] = pos6
+    cara[0][1] = pos4
+    cara[0][2] = pos1
+    cara[1][0] = pos7
+    cara[1][2] = pos2
+    cara[2][0] = pos8
+    cara[2][1] = pos5
+    cara[2][2] = pos3
+    cara[1][1] = pos9
+    return cara
+
+
+def U(cubo):
+    linea1 = cubo['front'][0]
+    linea2 = cubo['rigth'][0]
+    linea3 = cubo['back'][0]
+    linea4 = cubo['left'][0]
+    cubo['front'][0] = linea2
+    cubo['rigth'][0] = linea3
+    cubo['back'][0] = linea4
+    cubo['left'][0] = linea1
+    cubo['up'] = rotacara_relo(cubo['up'])
+    return cubo
+
+
+def Uprima(cubo):
+    linea1 = cubo['front'][0]
+    linea2 = cubo['rigth'][0]
+    linea3 = cubo['back'][0]
+    linea4 = cubo['left'][0]
+    cubo['front'][0] = linea4
+    cubo['rigth'][0] = linea1
+    cubo['back'][0] = linea2
+    cubo['left'][0] = linea3
+    cubo['up'] = rotacara_contrarelo(cubo['up'])
+    return cubo
+
+def F(cubo):
+    linea1 = cubo['up'][2]
+    linea2 = [cubo['rigth'][0][0],cubo['rigth'][1][0],cubo['rigth'][2][0]]
+    linea3 = cubo['down'][0]
+    linea4 = [cubo['left'][2][2],cubo['left'][1][2],cubo['left'][0][2]]
+    cubo['up'][2] = linea4
+    cubo['left'][0][2] = linea3[0]
+    cubo['left'][1][2] = linea3[1]
+    cubo['left'][2][2] = linea3[2]
+    cubo['down'][0][0] = linea2[2]
+    cubo['down'][0][1] = linea2[1]
+    cubo['down'][0][2] = linea2[0]
+    cubo['rigth'][0][0] = linea1[0]
+    cubo['rigth'][1][0] = linea1[1]
+    cubo['rigth'][2][0] = linea1[2]
+    cubo['front'] = rotacara_relo(cubo['front'])
+    return cubo
+
+def Fprima(cubo):
+    linea1 = cubo['up'][2]
+    linea2 = [cubo['rigth'][0][0],cubo['rigth'][1][0],cubo['rigth'][2][0]]
+    linea3 = cubo['down'][0]
+    linea4 = [cubo['left'][2][2],cubo['left'][1][2],cubo['left'][0][2]]
+    cubo['up'][2] = linea2
+    cubo['left'][0][2] = linea1[2]
+    cubo['left'][1][2] = linea1[1]
+    cubo['left'][2][2] = linea1[0]
+    cubo['rigth'][0][0] = linea3[2]
+    cubo['rigth'][1][0] = linea3[1]
+    cubo['rigth'][2][0] = linea3[0]
+    cubo['down'][0][0] = linea4[2]
+    cubo['down'][0][1] = linea4[1]
+    cubo['down'][0][2] = linea4[0]
+    cubo['front'] = rotacara_contrarelo(cubo['front'])
+    return cubo
+
+def R(cubo):
+    linea1 = [cubo['up'][0][2],cubo['up'][1][2],cubo['up'][2][2]]
+    linea2 = [cubo['front'][0][2],cubo['front'][1][2],cubo['front'][2][2]]
+    linea3 = [cubo['down'][0][2],cubo['down'][1][2],cubo['down'][2][2]]
+    linea4 = [cubo['back'][0][0],cubo['back'][1][0],cubo['back'][2][0]]
+    cubo['up'][0][2] = linea2[0]
+    cubo['up'][1][2] = linea2[1]
+    cubo['up'][2][2] = linea2[2]
+    cubo['back'][0][0] = linea1[2]
+    cubo['back'][1][0] = linea1[1]
+    cubo['back'][2][0] = linea1[0]
+    cubo['down'][0][2] = linea4[2]
+    cubo['down'][1][2] = linea4[1]
+    cubo['down'][2][2] = linea4[0]
+    cubo['front'][0][2] = linea3[0]
+    cubo['front'][1][2] = linea3[1]
+    cubo['front'][2][2] = linea3[2]
+    cubo['rigth'] = rotacara_relo(cubo['rigth'])
+    return cubo
+
+def Rprima(cubo):
+    linea1 = [cubo['up'][0][2],cubo['up'][1][2],cubo['up'][2][2]]
+    linea2 = [cubo['front'][0][2],cubo['front'][1][2],cubo['front'][2][2]]
+    linea3 = [cubo['down'][0][2],cubo['down'][1][2],cubo['down'][2][2]]
+    linea4 = [cubo['back'][0][0],cubo['back'][1][0],cubo['back'][2][0]]
+    cubo['up'][0][2] = linea4[2]
+    cubo['up'][1][2] = linea4[1]
+    cubo['up'][2][2] = linea4[0]
+    cubo['back'][0][0] = linea3[0]
+    cubo['back'][1][0] = linea3[1]
+    cubo['back'][2][0] = linea3[2]
+    cubo['down'][0][2] = linea2[0]
+    cubo['down'][1][2] = linea2[1]
+    cubo['down'][2][2] = linea2[2]
+    cubo['front'][0][2] = linea1[0]
+    cubo['front'][1][2] = linea1[1]
+    cubo['front'][2][2] = linea1[2]
+    cubo['rigth'] = rotacara_contrarelo(cubo['rigth'])
+    return cubo
+
+def D(cubo):
+    linea1 = cubo['front'][2]
+    linea2 = cubo['left'][2]
+    linea3 = cubo['back'][2]
+    linea4 = cubo['rigth'][2]
+    cubo['front'][2] = linea2
+    cubo['left'][2] = linea3
+    cubo['back'][2] = linea4
+    cubo['rigth'][2] = linea1
+    cubo['down'] = rotacara_relo(cubo['down'])
+    return cubo
+
+def Dprima(cubo):
+    linea1 = cubo['front'][2]
+    linea2 = cubo['left'][2]
+    linea3 = cubo['back'][2]
+    linea4 = cubo['rigth'][2]
+    cubo['front'][2] = linea4
+    cubo['left'][2] = linea1
+    cubo['back'][2] = linea2
+    cubo['rigth'][2] = linea3
+    cubo['down'] = rotacara_contrarelo(cubo['down'])
+    return cubo
+
+def B(cubo):
+    linea1 = cubo['up'][0]
+    linea2 = [cubo['left'][0][0], cubo['left'][1][0], cubo['left'][2][0]]
+    linea3 = cubo['down'][2]
+    linea4 = [cubo['rigth'][0][2], cubo['rigth'][1][2], cubo['rigth'][2][2]]
+    cubo['up'][0]= linea4
+    cubo['rigth'][0][2] = linea3[2]
+    cubo['rigth'][1][2] = linea3[1]
+    cubo['rigth'][2][2] = linea3[0]
+    cubo['down'][2]= linea2
+    cubo['left'][0][0] = linea1[2]
+    cubo['left'][1][0] = linea1[1]
+    cubo['left'][2][0] = linea1[0]
+    cubo['back'] = rotacara_relo(cubo['back'])
+    return cubo
+
+def Bprima(cubo):
+    linea1 = cubo['up'][0]
+    linea2 = [cubo['left'][2][0], cubo['left'][1][0], cubo['left'][0][0]]
+    linea3 = cubo['down'][2]
+    linea4 = [cubo['rigth'][2][2], cubo['rigth'][1][2], cubo['rigth'][0][2]]
+    cubo['up'][0] = linea2
+    cubo['rigth'][0][2] = linea1[0]
+    cubo['rigth'][1][2] = linea1[1]
+    cubo['rigth'][2][2] = linea1[2]
+    cubo['down'][2] = linea4
+    cubo['left'][0][0] = linea3[0]
+    cubo['left'][1][0] = linea3[1]
+    cubo['left'][2][0] = linea3[2]
+    cubo['back'] = rotacara_contrarelo(cubo['back'])
+    return cubo
+
+def L(cubo):
+    linea1 = [cubo['up'][0][0], cubo['up'][1][0], cubo['up'][2][0]]
+    linea2 = [cubo['front'][0][0], cubo['front'][1][0], cubo['front'][2][0]]
+    linea3 = [cubo['down'][0][0], cubo['down'][1][0], cubo['down'][2][0]]
+    linea4 = [cubo['back'][2][2], cubo['back'][1][2], cubo['back'][0][2]]
+    cubo['up'][0][0] = linea4[0]
+    cubo['up'][1][0] = linea4[1]
+    cubo['up'][2][0] = linea4[2]
+    cubo['back'][0][2] = linea3[2]
+    cubo['back'][1][2] = linea3[1]
+    cubo['back'][2][2] = linea3[0]
+    cubo['down'][0][0] = linea2[0]
+    cubo['down'][1][0] = linea2[1]
+    cubo['down'][2][0] = linea2[2]
+    cubo['front'][0][0] = linea1[0]
+    cubo['front'][1][0] = linea1[1]
+    cubo['front'][2][0] = linea1[2]
+    cubo['left'] = rotacara_relo(cubo['left'])
+    return cubo
+
+def Lprima(cubo):
+    linea1 = [cubo['up'][0][0], cubo['up'][1][0], cubo['up'][2][0]]
+    linea2 = [cubo['front'][0][0], cubo['front'][1][0], cubo['front'][2][0]]
+    linea3 = [cubo['down'][0][0], cubo['down'][1][0], cubo['down'][2][0]]
+    linea4 = [cubo['back'][2][2], cubo['back'][1][2], cubo['back'][0][2]]
+    cubo['up'][0][0] = linea2[0]
+    cubo['up'][1][0] = linea2[1]
+    cubo['up'][2][0] = linea2[2]
+    cubo['back'][0][2] = linea1[2]
+    cubo['back'][1][2] = linea1[1]
+    cubo['back'][2][2] = linea1[0]
+    cubo['down'][0][0] = linea4[0]
+    cubo['down'][1][0] = linea4[1]
+    cubo['down'][2][0] = linea4[2]
+    cubo['front'][0][0] = linea3[0]
+    cubo['front'][1][0] = linea3[1]
+    cubo['front'][2][0] = linea3[2]
+    cubo['left'] = rotacara_contrarelo(cubo['left'])
+    return cubo
+
+def fichalateral(cubo):
+    if cubo["front"][1][0] != 1 or cubo["front"][1][2] != 1 or cubo["left"][1][0] != 5 or cubo["left"][1][2] != 5 or cubo["back"][1][0] != 4 or cubo["back"][1][2] != 4 or cubo["rigth"][1][0] != 2 or cubo["rigth"][1][2] != 2:
+        if cubo["front"][1][1]==cubo["front"][2][1] or cubo["left"][1][1]==cubo["left"][2][1] or cubo["back"][1][1] == cubo["back"][2][1] or cubo["rigth"][1][1] == cubo["rigth"][2][1]:
+            if cubo["front"][1][1]==cubo["front"][2][1]:
+                if cubo["down"][0][1]!=3:
+                    if cubo["down"][0][1]==5:
+                        cubo=D(cubo);cubo=L(cubo);cubo=Dprima(cubo);cubo=Lprima(cubo);cubo=Dprima(cubo);cubo=Fprima(cubo);cubo=D(cubo);cubo=F(cubo)
+                        print("D,L,Dprima,Lprima,Dprima,Fprima,D,F")
+                        return fichalateral(cubo)
+                    else:
+                        cubo=Dprima(cubo);cubo=Rprima(cubo);cubo=D(cubo);cubo=R(cubo);cubo=D(cubo);cubo=F(cubo);cubo=Dprima(cubo);cubo=Fprima(cubo)
+                        print("Dprima,Rprima,D,R,D,F,Dprima,Fprima")
+                        return fichalateral(cubo)
+            if cubo["left"][1][1]==cubo["left"][2][1]:
+                if cubo["down"][1][0]!=3:
+                    if cubo["down"][1][0]==1:
+                        cubo=Dprima(cubo);cubo=Fprima(cubo);cubo=D(cubo);cubo=F(cubo);cubo=D(cubo);cubo=L(cubo);cubo=Dprima(cubo);cubo=Lprima(cubo)
+                        print("Dprima,Fprima,D,F,D,L,Dprima,Lprima")
+                        return fichalateral(cubo)
+                    else:
+                        cubo=D(cubo);cubo=B(cubo);cubo=Dprima(cubo);cubo=Bprima(cubo);cubo=Dprima(cubo);cubo=Lprima(cubo);cubo=D(cubo);cubo=L(cubo)
+                        print("D,B,Dprima,Bprima,Dprima,Lprima,D,L")
+                        return fichalateral(cubo)
+            if cubo["back"][1][1] == cubo["back"][2][1]:
+                if cubo["down"][2][1]!=3:
+                    if cubo["down"][2][1] == 5:
+                        cubo=Dprima(cubo);cubo=Lprima(cubo);cubo=D(cubo);cubo=L(cubo);cubo=D(cubo);cubo=B(cubo);cubo=Dprima(cubo);cubo=Bprima(cubo)
+                        print("Dprima,Lprima,D,L,D,B,Dprima,Bprima")
+                        return fichalateral(cubo)
+                    else:
+                        cubo=D(cubo);cubo=R(cubo);cubo=Dprima(cubo);cubo=Rprima(cubo);cubo=Dprima(cubo);cubo=Bprima(cubo);cubo=D(cubo);cubo=B(cubo)
+                        print("D,R,Dprima,Rprima,Dprima,Bprima,D,B")
+                        return fichalateral(cubo)
+            if cubo["rigth"][1][1] == cubo["rigth"][2][1]:
+                if cubo["down"][1][2] != 3:
+                    if cubo["down"][1][2] == 4:
+                        cubo=Dprima(cubo);cubo=Bprima(cubo);cubo=D(cubo);cubo=B(cubo);cubo=D(cubo);cubo=R(cubo);cubo=Dprima(cubo);cubo=Rprima(cubo)
+                        print("Dprima,Bprima,D,B,D,R,Dprima,Rprima")
+                        return fichalateral(cubo)
+                    else:
+                        cubo=D(cubo);cubo=F(cubo);cubo=Dprima(cubo);cubo=Fprima(cubo);cubo=Dprima(cubo);cubo=Rprima(cubo);cubo=D(cubo);cubo=R(cubo)
+                        print("D,F,Dprima,Fprima,Dprima,Rprima,D,R")
+                        return fichalateral(cubo)
+            elif (cubo["front"][1][2]==2 and cubo["rigth"][1][0]==1) or (cubo["front"][1][0]==5 and cubo["left"][1][2]==1) or (cubo["rigth"][1][2]==4 and cubo["back"][1][0]==2) or (cubo["back"][1][2]==5 and cubo["left"][1][0]==4):
+                if (cubo["front"][1][2]==2 and cubo["rigth"][1][0]==1):
+                    cubo = D(cubo);cubo = L(cubo);cubo = Dprima(cubo);cubo = Lprima(cubo);cubo = Dprima(cubo);cubo = Fprima(cubo);cubo = D(cubo);cubo = F(cubo)
+                    print("D,L,Dprima,Lprima,Dprima,Fprima,D,F")
+                    return fichalateral(cubo)
+                elif (cubo["front"][1][0]==5 and cubo["left"][1][2]==1):
+                    cubo = Dprima(cubo);cubo = Rprima(cubo);cubo = D(cubo);cubo = R(cubo);cubo = D(cubo);cubo = F(cubo);cubo = Dprima(cubo);cubo = Fprima(cubo)
+                    print("Dprima,Rprima,D,R,D,F,Dprima,Fprima")
+                    return fichalateral(cubo)
+                elif (cubo["rigth"][1][2]==4 and cubo["back"][1][0]==2):
+                    cubo = Dprima(cubo);cubo = Bprima(cubo);cubo = D(cubo);cubo = B(cubo);cubo = D(cubo);cubo = R(cubo);cubo = Dprima(cubo);cubo = Rprima(cubo)
+                    print("Dprima,Bprima,D,B,D,R,Dprima,Rprima")
+                    return fichalateral(cubo)
+                elif (cubo["back"][1][2]==5 and cubo["left"][1][0]==4):
+                    cubo = Dprima(cubo);cubo = Lprima(cubo);cubo = D(cubo);cubo = L(cubo);cubo = D(cubo);cubo = B(cubo);cubo = Dprima(cubo);cubo = Bprima(cubo)
+                    print("Dprima,Lprima,D,L,D,B,Dprima,Bprima")
+                    return fichalateral(cubo)
+        else:
+            cubo = D(cubo)
+            print("D")
+            return fichalateral(cubo)
+    return cubo
+
+
+def cruz_amarilla(cubo):
+    if (cubo["down"][0][1]==3 and cubo["down"][1][2]==3):
+        cubo=D(cubo)
+        cubo = D(cubo)
+        cubo = D(cubo)
+        print("D,D,D")
+        cubo=B(cubo);cubo=D(cubo);cubo=R(cubo);cubo=Dprima(cubo);cubo=Rprima(cubo);cubo=Bprima(cubo)
+        print("B,D,R,Dprima,Rprima,Bprima")
+    elif (cubo["down"][1][2]==3 and cubo["down"][2][1]==3):
+        cubo = D(cubo)
+        cubo = D(cubo)
+        print("D,D")
+        cubo = B(cubo);cubo = D(cubo);cubo = R(cubo);cubo = Dprima(cubo);cubo = Rprima(cubo);cubo = Bprima(cubo)
+        print("B,D,R,Dprima,Rprima,Bprima")
+    elif (cubo["down"][2][1]==3 and cubo["down"][1][0]==3):
+        cubo = D(cubo)
+        print("D")
+        cubo = B(cubo);cubo = D(cubo);cubo = R(cubo);cubo = Dprima(cubo);cubo = Rprima(cubo);cubo = Bprima(cubo)
+        print("B,D,R,Dprima,Rprima,Bprima")
+    elif (cubo["down"][0][1]!=3 and cubo["down"][1][0]!=3 and cubo["down"][1][2]!=3 and cubo["down"][2][1]!=3) or (cubo["down"][0][1]==3 and cubo["down"][1][0]==3) or (cubo["down"][1][0]==3 and cubo["down"][1][2]==3):
+        cubo = B(cubo);cubo = D(cubo);cubo = R(cubo);cubo = Dprima(cubo);cubo = Rprima(cubo);cubo = Bprima(cubo)
+        print("B,D,R,Dprima,Rprima,Bprima")
+def cruz_amarilla_bien(cubo):
+    if cubo ["rigth"][2][1]==2 and cubo ["back"][2][1]!=4 and cubo ["front"][2][1]!=1:
+        cubo=F(cubo);cubo=D(cubo);cubo=Fprima(cubo);cubo=D(cubo);cubo=F(cubo);cubo=D(cubo);cubo=D(cubo);cubo=F(cubo)
+        print("F,D,Fprima,D,F,D,D,F")
+        cubo = F(cubo);cubo = D(cubo);cubo = Fprima(cubo);cubo = D(cubo);cubo = F(cubo);cubo = D(cubo);cubo = D(cubo);cubo = F(cubo)
+        print("F,D,Fprima,D,F,D,D,F")
+    elif cubo ["left"][2][1]==5 and cubo ["back"][2][1]!=4 and cubo ["front"][2][1]!=1:
+        cubo=B(cubo);cubo=D(cubo);cubo=Bprima(cubo);cubo=D(cubo);cubo=B(cubo);cubo=D(cubo);cubo=D(cubo);cubo=Bprima(cubo)
+        print("B,D,Bprima,D,B,D,D,Bprima")
+        cubo = B(cubo);cubo = D(cubo);cubo = Bprima(cubo);cubo = D(cubo);cubo = B(cubo);cubo = D(cubo);cubo = D(cubo);cubo = Bprima(cubo)
+        print("B,D,Bprima,D,B,D,D,Bprima")
+    elif cubo ["back"][2][1]==4 and cubo ["left"][2][1]!=5 and cubo ["rigth"][2][1]!=2:
+        cubo=R(cubo);cubo=D(cubo);cubo=Rprima(cubo);cubo=D(cubo);cubo=R(cubo);cubo=D(cubo);cubo=D(cubo);cubo=Rprima(cubo)
+        print("R,D,Rprima,D,R,D,D,Rprima")
+        cubo = R(cubo);cubo = D(cubo);cubo = Rprima(cubo);cubo = D(cubo);cubo = R(cubo);cubo = D(cubo);cubo = D(cubo);cubo = Rprima(cubo)
+        print("R,D,Rprima,D,R,D,D,Rprima")
+    elif cubo ["front"][2][1]==1 and cubo ["left"][2][1]!=5 and cubo ["rigth"][2][1]!=2:
+        cubo=L(cubo);cubo=D(cubo);cubo=Lprima(cubo);cubo=D(cubo);cubo=L(cubo);cubo=D(cubo);cubo=D(cubo);cubo=Lprima(cubo)
+        print("L,D,Lprima,D,L,D,D,Lprima")
+        cubo = L(cubo);cubo = D(cubo);cubo = Lprima(cubo);cubo = D(cubo);cubo = L(cubo);cubo = D(cubo);cubo = D(cubo);cubo = Lprima(cubo)
+        print("L,D,Lprima,D,L,D,D,Lprima")
+    else:
+        cubo=D(cubo)
+        print("D")
+        return cruz_amarilla_bien(cubo)
+    return cubo
+
+def esquinas(cubo):
+    if (cubo["front"][2][2]==1 or cubo["front"][2][2]==3 or cubo["front"][2][2]==2) and (cubo["down"][0][2]==1 or cubo["down"][0][2]==2 or cubo["down"][0][2]==3) and (cubo["rigth"][2][0]==1 or cubo["rigth"][2][0]==2 or cubo["rigth"][2][0]==3):
+        Bprima(cubo); D(cubo); F(cubo);Dprima(cubo);B(cubo); D(cubo);Fprima(cubo);Dprima(cubo)
+        print("Bprima,D,F,Dprima,B,D,Fprima,Dprima")
+        Bprima(cubo);D(cubo);F(cubo);Dprima(cubo);B(cubo);D(cubo);Fprima(cubo);Dprima(cubo)
+        print("Bprima,D,F,Dprima,B,D,Fprima,Dprima")
+    elif (cubo["rigth"][2][2]==2 or cubo["rigth"][2][2]==3 or cubo["rigth"][2][2]==4) and (cubo["down"][2][2]==2 or cubo["down"][2][2]==3 or cubo["down"][2][2]==5) and (cubo["back"][2][0]==2 or cubo["back"][2][0]==3 or cubo["back"][2][0]==4):
+        Lprima(cubo);D(cubo);R(cubo);Dprima(cubo);L(cubo);D(cubo);Rprima(cubo);Dprima(cubo)
+        print("Lprima,D,R,Dprima,L,D,Rprima,Dprima")
+        Lprima(cubo);D(cubo);R(cubo);Dprima(cubo);L(cubo);D(cubo);Rprima(cubo);Dprima(cubo)
+        print("Lprima,D,R,Dprima,L,D,Rprima,Dprima")
+    elif (cubo["back"][2][2]==4 or cubo["back"][2][2]==3 or cubo["back"][2][2]==5) and (cubo["down"][2][0]==4 or cubo["down"][2][0]==3 or cubo["down"][2][0]==5) and (cubo["left"][2][0]==4 or cubo["left"][2][0]==3 or cubo["left"][2][0]==5):
+        Fprima(cubo);D(cubo);B(cubo);Dprima(cubo);F(cubo);D(cubo);Bprima(cubo);Dprima(cubo)
+        print("Fprima,D,B,Dprima,F,D,Bprima,Dprima")
+        Fprima(cubo);D(cubo);B(cubo);Dprima(cubo);F(cubo);D(cubo);Bprima(cubo);Dprima(cubo)
+        print("Fprima,D,B,Dprima,F,D,Bprima,Dprima")
+    elif (cubo["left"][2][2]==5 or cubo["left"][2][2]==3 or cubo["left"][2][2]==1) and (cubo["down"][0][0]==5 or cubo["down"][0][0]==3 or cubo["down"][0][0]==1) and (cubo["front"][2][0]==5 or cubo["back"][2][0]==3 or cubo["back"][2][0]==1):
+        Rprima(cubo);D(cubo);L(cubo);Dprima(cubo);R(cubo);D(cubo);Lprima(cubo);Dprima(cubo)
+        print("Rprima,D,L,Dprima,R,D,Lprima,Dprima")
+        Rprima(cubo);D(cubo);L(cubo);Dprima(cubo);R(cubo);D(cubo);Lprima(cubo);Dprima(cubo)
+        print("Rprima,D,L,Dprima,R,D,Lprima,Dprima")
+    else:
+        Rprima(cubo);D(cubo);L(cubo);Dprima(cubo);R(cubo);D(cubo);Lprima(cubo);Dprima(cubo)
+        print("Rprima,D,L,R,D,Lprima,Dprima")
+        Bprima(cubo);D(cubo);F(cubo);Dprima(cubo);B(cubo);D(cubo);Fprima(cubo);Dprima(cubo)
+        print("Bprima,D,F,Dprima,B,D,Fprima,Dprima")
+    return cubo
+def esquinas_final(cubo):
+    if cubo!=cubobase:
+        Dprima(cubo)
+        print("Dprima")
+        if cubo["back"][0][2]!=3:
+            Uprima(cubo);R(cubo);U(cubo);Rprima(cubo)
+            print("Uprima,R,U,Rprima")
+    return cubo
+
+def quefichaes(cubo, cara, fila, columna):
+    ficha = []
+    ficha.append(cubo[cara][fila][columna])
+    if cara == "up":
+        if columna == 1 and fila == 0:
+            ficha.append(cubo["back"][0][1])
+        elif columna == 1 and fila == 2:
+            ficha.append(cubo["front"][0][1])
+        elif columna == 0 and fila == 1:
+            ficha.append(cubo["left"][0][1])
+        elif columna == 2 and fila == 1:
+            ficha.append(cubo["rigth"][0][1])
+        elif fila == 0 and columna == 0:
+            ficha.append(cubo["back"][0][2])
+            ficha.append(cubo["left"][0][0])
+        elif fila == 2 and columna == 0:
+            ficha.append(cubo["left"][0][2])
+            ficha.append(cubo["front"][0][0])
+        elif fila == 0 and columna == 2:
+            ficha.append(cubo["rigth"][0][2])
+            ficha.append(cubo["back"][0][0])
+        elif fila == 2 and columna == 2:
+            ficha.append(cubo["front"][0][2])
+            ficha.append(cubo["left"][0][0])
+    if cara == "front":
+        if columna == 1 and fila == 0:
+            ficha.append(cubo["up"][2][1])
+        elif columna == 1 and fila == 2:
+            ficha.append(cubo["down"][0][1])
+        elif columna == 0 and fila == 1:
+            ficha.append(cubo["left"][1][2])
+        elif columna == 2 and fila == 1:
+            ficha.append(cubo["rigth"][1][0])
+        elif fila == 0 and columna == 0:
+            ficha.append(cubo["up"][2][0])
+            ficha.append(cubo["left"][0][2])
+        elif fila == 2 and columna == 0:
+            ficha.append(cubo["left"][2][2])
+            ficha.append(cubo["down"][0][0])
+        elif fila == 0 and columna == 2:
+            ficha.append(cubo["rigth"][0][0])
+            ficha.append(cubo["up"][2][2])
+        elif fila == 2 and columna == 2:
+            ficha.append(cubo["down"][0][2])
+            ficha.append(cubo["rigth"][2][0])
+    if cara == "rigth":
+        if columna == 1 and fila == 0:
+            ficha.append(cubo["up"][1][2])
+        elif columna == 1 and fila == 2:
+            ficha.append(cubo["down"][1][2])
+        elif columna == 0 and fila == 1:
+            ficha.append(cubo["front"][1][2])
+        elif columna == 2 and fila == 1:
+            ficha.append(cubo["back"][1][2])
+        elif fila == 0 and columna == 0:
+            ficha.append(cubo["up"][2][2])
+            ficha.append(cubo["front"][0][2])
+        elif fila == 2 and columna == 0:
+            ficha.append(cubo["front"][2][2])
+            ficha.append(cubo["down"][0][2])
+        elif fila == 0 and columna == 2:
+            ficha.append(cubo["back"][0][0])
+            ficha.append(cubo["up"][0][2])
+        elif fila == 2 and columna == 2:
+            ficha.append(cubo["down"][0][2])
+            ficha.append(cubo["back"][2][0])
+    if cara == "left":
+        if columna == 1 and fila == 0:
+            ficha.append(cubo["up"][1][0])
+        elif columna == 1 and fila == 2:
+            ficha.append(cubo["down"][1][0])
+        elif columna == 0 and fila == 1:
+            ficha.append(cubo["back"][1][2])
+        elif columna == 2 and fila == 1:
+            ficha.append(cubo["front"][1][2])
+        elif fila == 0 and columna == 0:
+            ficha.append(cubo["up"][0][0])
+            ficha.append(cubo["back"][0][2])
+        elif fila == 2 and columna == 0:
+            ficha.append(cubo["back"][2][2])
+            ficha.append(cubo["down"][2][0])
+        elif fila == 0 and columna == 2:
+            ficha.append(cubo["front"][0][0])
+            ficha.append(cubo["up"][2][0])
+        elif fila == 2 and columna == 2:
+            ficha.append(cubo["down"][0][0])
+            ficha.append(cubo["front"][2][0])
+    if cara == "back":
+        if columna == 1 and fila == 0:
+            ficha.append(cubo["up"][0][1])
+        elif columna == 1 and fila == 2:
+            ficha.append(cubo["down"][2][1])
+        elif columna == 0 and fila == 1:
+            ficha.append(cubo["rigth"][1][2])
+        elif columna == 2 and fila == 1:
+            ficha.append(cubo["left"][1][0])
+        elif fila == 0 and columna == 0:
+            ficha.append(cubo["up"][0][2])
+            ficha.append(cubo["rigth"][0][2])
+        elif fila == 2 and columna == 0:
+            ficha.append(cubo["rigth"][2][2])
+            ficha.append(cubo["down"][2][2])
+        elif fila == 0 and columna == 2:
+            ficha.append(cubo["left"][0][0])
+            ficha.append(cubo["up"][0][0])
+        elif fila == 2 and columna == 2:
+            ficha.append(cubo["down"][2][0])
+            ficha.append(cubo["left"][2][0])
+    if cara == "down":
+        if columna == 1 and fila == 0:
+            ficha.append(cubo["front"][2][1])
+        elif columna == 1 and fila == 2:
+            ficha.append(cubo["back"][2][1])
+        elif columna == 0 and fila == 1:
+            ficha.append(cubo["left"][2][1])
+        elif columna == 2 and fila == 1:
+            ficha.append(cubo["rigth"][2][1])
+        elif fila == 0 and columna == 0:
+            ficha.append(cubo["front"][2][0])
+            ficha.append(cubo["left"][2][2])
+        elif fila == 2 and columna == 0:
+            ficha.append(cubo["back"][2][2])
+            ficha.append(cubo["left"][2][0])
+        elif fila == 0 and columna == 2:
+            ficha.append(cubo["left"][2][0])
+            ficha.append(cubo["front"][2][2])
+        elif fila == 2 and columna == 2:
+            ficha.append(cubo["back"][2][0])
+            ficha.append(cubo["rigth"][2][2])
+    return ficha
+
+def armresto(cubo):
+    if cubo["front"][1][1]!=cubo["front"][0][1]:
+        U(cubo)
+        print("U")
+    print(fichalateral(cubo))
+    print(cruz_amarilla(cubo))
+    print(cruz_amarilla_bien(cubo))
+    print(esquinas(cubo))
+    print(esquinas_final(cubo))
+
+print(armresto(cubo))
+pprint.pprint(cubo)
