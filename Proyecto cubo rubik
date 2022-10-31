@@ -1,6 +1,6 @@
 #print(a#1=rojo 2=azul 3=amarillo 4=naranja 5=verde 6=blanco
-import pprint
-cubobase =dict(up= [[6, 6, 6],
+import pprint   #Importamos la libreria pprint para imprimir el cubo de una forma ordenada
+cubobase =dict(up= [[6, 6, 6],      #Asignamos el primer diccionario con el cubo base haciendo una matriz 3x3 por cada cara, el cual esta totalmente armado para realizar la ultima validacion de que se parezca en cada una de sus caras
                [6, 6, 6],
                [6, 6, 6]],
            front= [[1, 1, 1],
@@ -18,7 +18,7 @@ cubobase =dict(up= [[6, 6, 6],
            down= [[3, 3, 3],
                  [3, 3, 3],
                  [3, 3, 3]])
-cubo =dict(up= [[6,6,6],
+cubo =dict(up= [[6,6,6],        #Segundo diccionario el cual se le va a asignar el cubo que queremos armar para que realice los debidos procesos y muestre los pasos necesarios para resolverlo
              [6,6,6],
              [6,6,6]],
            front= [[1,1,1],
@@ -36,8 +36,9 @@ cubo =dict(up= [[6,6,6],
            down= [[4,3,5],
                [3,3,3],
                [2,3,4]])
-def rotacara_contrarelo(cara):
-    pos1 = cara[0][0]
+
+def rotacara_contrarelo(cara):      #Se hacen dos funciones para la rotacion de la cara tanto en el sentido de las manecillas del reloj como en la direccion contraria
+    pos1 = cara[0][0]               #Las siguientes 9 lineas se hacen para darle el valor que hay en cada posicion de la cara a una variable para luego asignarala en la respectiva posicion que deberia quedar asignada despues de la rotacion
     pos2 = cara[0][1]
     pos3 = cara[0][2]
     pos4 = cara[1][0]
@@ -46,7 +47,7 @@ def rotacara_contrarelo(cara):
     pos7 = cara[2][1]
     pos8 = cara[2][2]
     pos9 = cara[1][1]
-    cara[0][0] = pos3
+    cara[0][0] = pos3               #Las siguientes nueve son para asignar en cada posicion el valor que guardamos en cada variable y se ve la respectiva rotacion
     cara[0][1] = pos5
     cara[0][2] = pos8
     cara[1][0] = pos2
@@ -55,10 +56,10 @@ def rotacara_contrarelo(cara):
     cara[2][1] = pos4
     cara[2][2] = pos6
     cara[1][1] = pos9
-    return cara
+    return cara                     #Retronamos la cara con la rotacion  para que se actualice el respectivo cubo y se sigan haciendo los movimientos
 
 
-def rotacara_relo(cara):
+def rotacara_relo(cara):            #La segunda funcion igual que la anterior, pero rota en la direccion de las manecillas del reloj
     pos1 = cara[0][0]
     pos2 = cara[0][1]
     pos3 = cara[0][2]
@@ -78,22 +79,22 @@ def rotacara_relo(cara):
     cara[2][2] = pos3
     cara[1][1] = pos9
     return cara
+#Empezamos con los movimientos basicos en el sistema internacional, los cuales se llaman como sus caras y cuando se llaman prima o tienen una comilla es en sentido contrario a las manecillas del reloj, de lo contrario es en el sentido normal
 
-
-def U(cubo):
-    linea1 = cubo['front'][0]
+def U(cubo):   #Se hace el movimiento de la cara up la cual es la de arriba, en este caso la blanca en el sentido de las manecillas del reloj
+    linea1 = cubo['front'][0]       #Se asigna la fila 0 de cada cara a una variable para hacer la respectiva rotacion de los colores tanto en las fichas que comparten con la cara blanca
     linea2 = cubo['rigth'][0]
     linea3 = cubo['back'][0]
     linea4 = cubo['left'][0]
-    cubo['front'][0] = linea2
+    cubo['front'][0] = linea2        #Se hace la respectiva asignacion de los valores a la nueva cara de la que hacen parte en dado caso de la linea 1 pasa de la cara front que es la del centro rojo a la cara left que es la que tiene centro color verde
     cubo['rigth'][0] = linea3
     cubo['back'][0] = linea4
     cubo['left'][0] = linea1
-    cubo['up'] = rotacara_relo(cubo['up'])
-    return cubo
+    cubo['up'] = rotacara_relo(cubo['up'])      #Se usa la funcion de rotar la cara para hacer la respectiva rotacion de la cara si se viera de un punto frontal
+    return cubo         #Se retorna el cubo para guardar todos los cambios
 
 
-def Uprima(cubo):
+def Uprima(cubo):       #Igual que la funcion de arriba pero en sentido contrario
     linea1 = cubo['front'][0]
     linea2 = cubo['rigth'][0]
     linea3 = cubo['back'][0]
@@ -104,7 +105,7 @@ def Uprima(cubo):
     cubo['left'][0] = linea3
     cubo['up'] = rotacara_contrarelo(cubo['up'])
     return cubo
-
+#Las siguientes lineas hasta la 279 se encargan de los movimientos basicos como los dos anteriores especificados, el unico cambio es que es por cada cara donde se ven front, left, back, richt y down
 def F(cubo):
     linea1 = cubo['up'][2]
     linea2 = [cubo['rigth'][0][0],cubo['rigth'][1][0],cubo['rigth'][2][0]]
@@ -276,20 +277,20 @@ def Lprima(cubo):
     cubo['front'][2][0] = linea3[2]
     cubo['left'] = rotacara_contrarelo(cubo['left'])
     return cubo
-
-def fichalateral(cubo):
-    if cubo["front"][1][0] != 1 or cubo["front"][1][2] != 1 or cubo["left"][1][0] != 5 or cubo["left"][1][2] != 5 or cubo["back"][1][0] != 4 or cubo["back"][1][2] != 4 or cubo["rigth"][1][0] != 2 or cubo["rigth"][1][2] != 2:
-        if cubo["front"][1][1]==cubo["front"][2][1] or cubo["left"][1][1]==cubo["left"][2][1] or cubo["back"][1][1] == cubo["back"][2][1] or cubo["rigth"][1][1] == cubo["rigth"][2][1]:
-            if cubo["front"][1][1]==cubo["front"][2][1]:
-                if cubo["down"][0][1]!=3:
-                    if cubo["down"][0][1]==5:
-                        cubo=D(cubo);cubo=L(cubo);cubo=Dprima(cubo);cubo=Lprima(cubo);cubo=Dprima(cubo);cubo=Fprima(cubo);cubo=D(cubo);cubo=F(cubo)
-                        print("D,L,Dprima,Lprima,Dprima,Fprima,D,F")
-                        return fichalateral(cubo)
+#Aqui empieza la funcion para empezar con el algoritmo despues de tener la cara blanca armada de manera correcta
+def fichalateral(cubo):     #Se inicia la funcion para cuadrar las fichas del lado del centro de cada cara menos la de abajo, cabe recalcar que el cubo se toma como front en rojo y up en blanco
+    if cubo["front"][1][0] != 1 or cubo["front"][1][2] != 1 or cubo["left"][1][0] != 5 or cubo["left"][1][2] != 5 or cubo["back"][1][0] != 4 or cubo["back"][1][2] != 4 or cubo["rigth"][1][0] != 2 or cubo["rigth"][1][2] != 2:        #Se hacen las respectivas validaciones para tener en cuenta que las fichas que queremos ordenar no esten en el sitio que deben, luego de esto empieza el bucle
+        if cubo["front"][1][1]==cubo["front"][2][1] or cubo["left"][1][1]==cubo["left"][2][1] or cubo["back"][1][1] == cubo["back"][2][1] or cubo["rigth"][1][1] == cubo["rigth"][2][1]:        #Se hace la validacion para ver que la ficha de abajo de el centro de cualquier cara sea igual al centro de estas
+            if cubo["front"][1][1]==cubo["front"][2][1]:        #Esta validacion es para ver si el centro de la cara front es igual a la ficha que esta debajo de el que se hagan las otras condiciones, todas las validaciones en esta identacion nos sirven para evaluar esto en cada cara
+                if cubo["down"][0][1]!=3:                       #se evalua que la ficha con la cual se contecta la que esta en la posicion 2,1 de la cara front sea distinta a el color del centro de la cara down
+                    if cubo["down"][0][1]==5:                   #Luego de esto se evalua si esta ficha es igual a el color verde que se hagan ciertos movimientos basicos para organizarla
+                        cubo=D(cubo);cubo=L(cubo);cubo=Dprima(cubo);cubo=Lprima(cubo);cubo=Dprima(cubo);cubo=Fprima(cubo);cubo=D(cubo);cubo=F(cubo)     #Hace los respectivos movimientos
+                        print("D,L,Dprima,Lprima,Dprima,Fprima,D,F")        #Se le indica a la persona los movimientos a seguir
+                        return fichalateral(cubo)       #se realiza la recursion hasta que quede organizada las segundas filas de todas las caras laterales
                     else:
-                        cubo=Dprima(cubo);cubo=Rprima(cubo);cubo=D(cubo);cubo=R(cubo);cubo=D(cubo);cubo=F(cubo);cubo=Dprima(cubo);cubo=Fprima(cubo)
-                        print("Dprima,Rprima,D,R,D,F,Dprima,Fprima")
-                        return fichalateral(cubo)
+                        cubo=Dprima(cubo);cubo=Rprima(cubo);cubo=D(cubo);cubo=R(cubo);cubo=D(cubo);cubo=F(cubo);cubo=Dprima(cubo);cubo=Fprima(cubo)         #Si la condicion aterior no se cumple quiere decit que la ficha es color azul por lo que se realizan los movimientos contrarios para organizarlo
+                        print("Dprima,Rprima,D,R,D,F,Dprima,Fprima")    #Imprime los movimientos
+                        return fichalateral(cubo)       #Realiza la recursiom, luego de esto sigue con la siguiente cara lateral, este proceso se repite con cada una hasta organizarlas por completo
             if cubo["left"][1][1]==cubo["left"][2][1]:
                 if cubo["down"][1][0]!=3:
                     if cubo["down"][1][0]==1:
@@ -320,11 +321,11 @@ def fichalateral(cubo):
                         cubo=D(cubo);cubo=F(cubo);cubo=Dprima(cubo);cubo=Fprima(cubo);cubo=Dprima(cubo);cubo=Rprima(cubo);cubo=D(cubo);cubo=R(cubo)
                         print("D,F,Dprima,Fprima,Dprima,Rprima,D,R")
                         return fichalateral(cubo)
-            elif (cubo["front"][1][2]==2 and cubo["rigth"][1][0]==1) or (cubo["front"][1][0]==5 and cubo["left"][1][2]==1) or (cubo["rigth"][1][2]==4 and cubo["back"][1][0]==2) or (cubo["back"][1][2]==5 and cubo["left"][1][0]==4):
-                if (cubo["front"][1][2]==2 and cubo["rigth"][1][0]==1):
-                    cubo = D(cubo);cubo = L(cubo);cubo = Dprima(cubo);cubo = Lprima(cubo);cubo = Dprima(cubo);cubo = Fprima(cubo);cubo = D(cubo);cubo = F(cubo)
-                    print("D,L,Dprima,Lprima,Dprima,Fprima,D,F")
-                    return fichalateral(cubo)
+            elif (cubo["front"][1][2]==2 and cubo["rigth"][1][0]==1) or (cubo["front"][1][0]==5 and cubo["left"][1][2]==1) or (cubo["rigth"][1][2]==4 and cubo["back"][1][0]==2) or (cubo["back"][1][2]==5 and cubo["left"][1][0]==4):  #esta validacion se realiza en dado caso que ninguna pieza se le pueda hacer los movimientos entonces se acomoda para realizaralos
+                if (cubo["front"][1][2]==2 and cubo["rigth"][1][0]==1):     #Se hace la validacion para ver si la ficha esta invertida en la posicion que deberia estar
+                    cubo = D(cubo);cubo = L(cubo);cubo = Dprima(cubo);cubo = Lprima(cubo);cubo = Dprima(cubo);cubo = Fprima(cubo);cubo = D(cubo);cubo = F(cubo)#se realizan los movimientos necesarios para sacarla de ahi y realizar la recursion para organizarala
+                    print("D,L,Dprima,Lprima,Dprima,Fprima,D,F")        #Imprime los movimientos
+                    return fichalateral(cubo)       #Retorna la funcion, se hace lo mismo con cada cara
                 elif (cubo["front"][1][0]==5 and cubo["left"][1][2]==1):
                     cubo = Dprima(cubo);cubo = Rprima(cubo);cubo = D(cubo);cubo = R(cubo);cubo = D(cubo);cubo = F(cubo);cubo = Dprima(cubo);cubo = Fprima(cubo)
                     print("Dprima,Rprima,D,R,D,F,Dprima,Fprima")
@@ -337,21 +338,21 @@ def fichalateral(cubo):
                     cubo = Dprima(cubo);cubo = Lprima(cubo);cubo = D(cubo);cubo = L(cubo);cubo = D(cubo);cubo = B(cubo);cubo = Dprima(cubo);cubo = Bprima(cubo)
                     print("Dprima,Lprima,D,L,D,B,Dprima,Bprima")
                     return fichalateral(cubo)
-        else:
+        else:       #si no se cumple ninguna condicion va a rotar la cara down en sentido de las manecillas del reloj
             cubo = D(cubo)
             print("D")
             return fichalateral(cubo)
-    return cubo
+    return cubo     #Cuando se cumplan todas las condiciones se va a retornar el cubo con las 2 filas de las caras laterales acomodadas
 
 
-def cruz_amarilla(cubo):
-    if (cubo["down"][0][1]==3 and cubo["down"][1][2]==3):
-        cubo=D(cubo)
+def cruz_amarilla(cubo):        #se inicia la funcion del paso siguiente a realizar que es hacer la cruz de la cara down
+    if (cubo["down"][0][1]==3 and cubo["down"][1][2]==3):       #Se hace la respectiva validacion la cual nos indica que la parte superior de la cruz sea de color amarillo
+        cubo=D(cubo)        #Si se cumple la anterior validacion se va a rotar la cara down 3 veces
         cubo = D(cubo)
         cubo = D(cubo)
         print("D,D,D")
-        cubo=B(cubo);cubo=D(cubo);cubo=R(cubo);cubo=Dprima(cubo);cubo=Rprima(cubo);cubo=Bprima(cubo)
-        print("B,D,R,Dprima,Rprima,Bprima")
+        cubo=B(cubo);cubo=D(cubo);cubo=R(cubo);cubo=Dprima(cubo);cubo=Rprima(cubo);cubo=Bprima(cubo)        #Luego se va a hacer los movimientos para hacer la cruz amarilla, sin embargo no con los centros de manera correcta
+        print("B,D,R,Dprima,Rprima,Bprima")         #Se le dan las indicaciones al usuario, se repite el proceso con todos los centros hasta obtener la cruz amarilla, sin embargo puede estar desorganizada
     elif (cubo["down"][1][2]==3 and cubo["down"][2][1]==3):
         cubo = D(cubo)
         cubo = D(cubo)
@@ -366,8 +367,10 @@ def cruz_amarilla(cubo):
     elif (cubo["down"][0][1]!=3 and cubo["down"][1][0]!=3 and cubo["down"][1][2]!=3 and cubo["down"][2][1]!=3) or (cubo["down"][0][1]==3 and cubo["down"][1][0]==3) or (cubo["down"][1][0]==3 and cubo["down"][1][2]==3):
         cubo = B(cubo);cubo = D(cubo);cubo = R(cubo);cubo = Dprima(cubo);cubo = Rprima(cubo);cubo = Bprima(cubo)
         print("B,D,R,Dprima,Rprima,Bprima")
-def cruz_amarilla_bien(cubo):
-    if cubo ["rigth"][2][1]==2 and cubo ["back"][2][1]!=4 and cubo ["front"][2][1]!=1:
+    return cubo     #Se retorna el cubo con la cruz ya armada
+
+def cruz_amarilla_bien(cubo):       #Se inicia la funcion para ordenar la cruz amarilla hecha en la anterior funcion
+    if cubo ["rigth"][2][1]==2 and cubo ["back"][2][1]!=4 and cubo ["front"][2][1]!=1:      #
         cubo=F(cubo);cubo=D(cubo);cubo=Fprima(cubo);cubo=D(cubo);cubo=F(cubo);cubo=D(cubo);cubo=D(cubo);cubo=F(cubo)
         print("F,D,Fprima,D,F,D,D,F")
         cubo = F(cubo);cubo = D(cubo);cubo = Fprima(cubo);cubo = D(cubo);cubo = F(cubo);cubo = D(cubo);cubo = D(cubo);cubo = F(cubo)
@@ -377,7 +380,7 @@ def cruz_amarilla_bien(cubo):
         print("B,D,Bprima,D,B,D,D,Bprima")
         cubo = B(cubo);cubo = D(cubo);cubo = Bprima(cubo);cubo = D(cubo);cubo = B(cubo);cubo = D(cubo);cubo = D(cubo);cubo = Bprima(cubo)
         print("B,D,Bprima,D,B,D,D,Bprima")
-    elif cubo ["back"][2][1]==4 and cubo ["left"][2][1]!=5 and cubo ["rigth"][2][1]!=2:
+    elif cubo ["back"][2][1]==4 and cubo ["left"][2][1]!=5 and cubo ["rigth"][2][1]!=2:                                                                     
         cubo=R(cubo);cubo=D(cubo);cubo=Rprima(cubo);cubo=D(cubo);cubo=R(cubo);cubo=D(cubo);cubo=D(cubo);cubo=Rprima(cubo)
         print("R,D,Rprima,D,R,D,D,Rprima")
         cubo = R(cubo);cubo = D(cubo);cubo = Rprima(cubo);cubo = D(cubo);cubo = R(cubo);cubo = D(cubo);cubo = D(cubo);cubo = Rprima(cubo)
@@ -391,7 +394,7 @@ def cruz_amarilla_bien(cubo):
         cubo=D(cubo)
         print("D")
         return cruz_amarilla_bien(cubo)
-    return cubo
+    return cubo     #Se retorna el cubo despues de organizar toda la cruz amarilla y organizada
 
 def esquinas(cubo):
     if (cubo["front"][2][2]==1 or cubo["front"][2][2]==3 or cubo["front"][2][2]==2) and (cubo["down"][0][2]==1 or cubo["down"][0][2]==2 or cubo["down"][0][2]==3) and (cubo["rigth"][2][0]==1 or cubo["rigth"][2][0]==2 or cubo["rigth"][2][0]==3):
