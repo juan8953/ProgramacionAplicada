@@ -1,3 +1,5 @@
+#Hecho por Maria Alejandra Leyton y Juan David Panadero
+
 #print(a#1=rojo 2=azul 3=amarillo 4=naranja 5=verde 6=blanco
 import pprint   #Importamos la libreria pprint para imprimir el cubo de una forma ordenada
 cubobase =dict(up= [[6, 6, 6],      #Asignamos el primer diccionario con el cubo base haciendo una matriz 3x3 por cada cara, el cual esta totalmente armado para realizar la ultima validacion de que se parezca en cada una de sus caras
@@ -370,17 +372,17 @@ def cruz_amarilla(cubo):        #se inicia la funcion del paso siguiente a reali
     return cubo     #Se retorna el cubo con la cruz ya armada
 
 def cruz_amarilla_bien(cubo):       #Se inicia la funcion para ordenar la cruz amarilla hecha en la anterior funcion
-    if cubo ["rigth"][2][1]==2 and cubo ["back"][2][1]!=4 and cubo ["front"][2][1]!=1:      #
-        cubo=F(cubo);cubo=D(cubo);cubo=Fprima(cubo);cubo=D(cubo);cubo=F(cubo);cubo=D(cubo);cubo=D(cubo);cubo=F(cubo)
-        print("F,D,Fprima,D,F,D,D,F")
-        cubo = F(cubo);cubo = D(cubo);cubo = Fprima(cubo);cubo = D(cubo);cubo = F(cubo);cubo = D(cubo);cubo = D(cubo);cubo = F(cubo)
-        print("F,D,Fprima,D,F,D,D,F")
-    elif cubo ["left"][2][1]==5 and cubo ["back"][2][1]!=4 and cubo ["front"][2][1]!=1:
+    if cubo ["rigth"][2][1]==2 and cubo ["back"][2][1]!=4 and cubo ["front"][2][1]!=1:      #Se hace la validacion para ver si estan bien cuadradas los centros de la cruz amarilla, para poder hacer los respectivos movimientos si no
+        cubo=F(cubo);cubo=D(cubo);cubo=Fprima(cubo);cubo=D(cubo);cubo=F(cubo);cubo=D(cubo);cubo=D(cubo);cubo=F(cubo)        #Se hacen los respectivos movimientos los cuales organizan la cruz para poder hacer los ultimos pasos
+        print("F,D,Fprima,D,F,D,D,F")       #Le indica los movimientos al usuario
+        cubo = F(cubo);cubo = D(cubo);cubo = Fprima(cubo);cubo = D(cubo);cubo = F(cubo);cubo = D(cubo);cubo = D(cubo);cubo = F(cubo)        #Realiza los movimientos
+        print("F,D,Fprima,D,F,D,D,F")       #Se los indica al usuario
+    elif cubo ["left"][2][1]==5 and cubo ["back"][2][1]!=4 and cubo ["front"][2][1]!=1:     #Las siguientes validaciones cumplen la misma funcion de la anterior, pero cambia es el color de los colores que conectan en la cruz amarilla, de resto el proceso sigue siendo el  mismo
         cubo=B(cubo);cubo=D(cubo);cubo=Bprima(cubo);cubo=D(cubo);cubo=B(cubo);cubo=D(cubo);cubo=D(cubo);cubo=Bprima(cubo)
         print("B,D,Bprima,D,B,D,D,Bprima")
         cubo = B(cubo);cubo = D(cubo);cubo = Bprima(cubo);cubo = D(cubo);cubo = B(cubo);cubo = D(cubo);cubo = D(cubo);cubo = Bprima(cubo)
         print("B,D,Bprima,D,B,D,D,Bprima")
-    elif cubo ["back"][2][1]==4 and cubo ["left"][2][1]!=5 and cubo ["rigth"][2][1]!=2:                                                                     
+    elif cubo ["back"][2][1]==4 and cubo ["left"][2][1]!=5 and cubo ["rigth"][2][1]!=2:
         cubo=R(cubo);cubo=D(cubo);cubo=Rprima(cubo);cubo=D(cubo);cubo=R(cubo);cubo=D(cubo);cubo=D(cubo);cubo=Rprima(cubo)
         print("R,D,Rprima,D,R,D,D,Rprima")
         cubo = R(cubo);cubo = D(cubo);cubo = Rprima(cubo);cubo = D(cubo);cubo = R(cubo);cubo = D(cubo);cubo = D(cubo);cubo = Rprima(cubo)
@@ -396,12 +398,12 @@ def cruz_amarilla_bien(cubo):       #Se inicia la funcion para ordenar la cruz a
         return cruz_amarilla_bien(cubo)
     return cubo     #Se retorna el cubo despues de organizar toda la cruz amarilla y organizada
 
-def esquinas(cubo):
-    if (cubo["front"][2][2]==1 or cubo["front"][2][2]==3 or cubo["front"][2][2]==2) and (cubo["down"][0][2]==1 or cubo["down"][0][2]==2 or cubo["down"][0][2]==3) and (cubo["rigth"][2][0]==1 or cubo["rigth"][2][0]==2 or cubo["rigth"][2][0]==3):
-        Bprima(cubo); D(cubo); F(cubo);Dprima(cubo);B(cubo); D(cubo);Fprima(cubo);Dprima(cubo)
-        print("Bprima,D,F,Dprima,B,D,Fprima,Dprima")
-        Bprima(cubo);D(cubo);F(cubo);Dprima(cubo);B(cubo);D(cubo);Fprima(cubo);Dprima(cubo)
-        print("Bprima,D,F,Dprima,B,D,Fprima,Dprima")
+def esquinas(cubo):     #Esta funcion es para organizar las esquinas para que cada una quede en su sitio, sin importar si no estan bien cuadradas segun color, unicamente nos arroja que este en su sitio
+    if (cubo["front"][2][2]==1 or cubo["front"][2][2]==3 or cubo["front"][2][2]==2) and (cubo["down"][0][2]==1 or cubo["down"][0][2]==2 or cubo["down"][0][2]==3) and (cubo["rigth"][2][0]==1 or cubo["rigth"][2][0]==2 or cubo["rigth"][2][0]==3):     #Se evalua si la esquina esta en la posicion que debe para organizar la otra, tenga en cuenta que solo se necesita una organizada para organizar el resto
+        Bprima(cubo); D(cubo); F(cubo);Dprima(cubo);B(cubo); D(cubo);Fprima(cubo);Dprima(cubo)      #Hace los respectivos movimientos
+        print("Bprima,D,F,Dprima,B,D,Fprima,Dprima")        #Se los indica al usuario
+        Bprima(cubo);D(cubo);F(cubo);Dprima(cubo);B(cubo);D(cubo);Fprima(cubo);Dprima(cubo)     #Repite los movimientos
+        print("Bprima,D,F,Dprima,B,D,Fprima,Dprima")        #se los indica al usuario, en las siguientes lineas hace la misma validacion pero en cada esquina de el cubo para organizarlas y finiquitar el cubo
     elif (cubo["rigth"][2][2]==2 or cubo["rigth"][2][2]==3 or cubo["rigth"][2][2]==4) and (cubo["down"][2][2]==2 or cubo["down"][2][2]==3 or cubo["down"][2][2]==5) and (cubo["back"][2][0]==2 or cubo["back"][2][0]==3 or cubo["back"][2][0]==4):
         Lprima(cubo);D(cubo);R(cubo);Dprima(cubo);L(cubo);D(cubo);Rprima(cubo);Dprima(cubo)
         print("Lprima,D,R,Dprima,L,D,Rprima,Dprima")
@@ -422,156 +424,22 @@ def esquinas(cubo):
         print("Rprima,D,L,R,D,Lprima,Dprima")
         Bprima(cubo);D(cubo);F(cubo);Dprima(cubo);B(cubo);D(cubo);Fprima(cubo);Dprima(cubo)
         print("Bprima,D,F,Dprima,B,D,Fprima,Dprima")
-    return cubo
-def esquinas_final(cubo):
-    if cubo!=cubobase:
-        Dprima(cubo)
-        print("Dprima")
-        if cubo["back"][0][2]!=3:
-            Uprima(cubo);R(cubo);U(cubo);Rprima(cubo)
+    return cubo     #Retorna el cubo con las esquinas
+
+def esquinas_final(cubo):       #Funcion para terminar el cubo y acomodar las esquinas de manera correcta segun su color
+    if cubo!=cubobase:      #Se compara el cubo que tenemos con el base que es el que esta totalmente armado
+        Dprima(cubo)        #Si se cumple la anterior validacion, se mueve la cada down en sentido de las manecillas
+        print("Dprima")     #Imprime el movimiento
+        if cubo["back"][0][2]!=3:       #Y si la esquina no esta bien ordenada, que haga los siguientes pasos
+            Uprima(cubo);R(cubo);U(cubo);Rprima(cubo)       #Realiza movimientos y se los indica al usuario
             print("Uprima,R,U,Rprima")
+    else:
+        print("termino su cubo")        #Si ya se organiza el cubo va a imprimir que lo soluciono
     return cubo
 
-def quefichaes(cubo, cara, fila, columna):
-    ficha = []
-    ficha.append(cubo[cara][fila][columna])
-    if cara == "up":
-        if columna == 1 and fila == 0:
-            ficha.append(cubo["back"][0][1])
-        elif columna == 1 and fila == 2:
-            ficha.append(cubo["front"][0][1])
-        elif columna == 0 and fila == 1:
-            ficha.append(cubo["left"][0][1])
-        elif columna == 2 and fila == 1:
-            ficha.append(cubo["rigth"][0][1])
-        elif fila == 0 and columna == 0:
-            ficha.append(cubo["back"][0][2])
-            ficha.append(cubo["left"][0][0])
-        elif fila == 2 and columna == 0:
-            ficha.append(cubo["left"][0][2])
-            ficha.append(cubo["front"][0][0])
-        elif fila == 0 and columna == 2:
-            ficha.append(cubo["rigth"][0][2])
-            ficha.append(cubo["back"][0][0])
-        elif fila == 2 and columna == 2:
-            ficha.append(cubo["front"][0][2])
-            ficha.append(cubo["left"][0][0])
-    if cara == "front":
-        if columna == 1 and fila == 0:
-            ficha.append(cubo["up"][2][1])
-        elif columna == 1 and fila == 2:
-            ficha.append(cubo["down"][0][1])
-        elif columna == 0 and fila == 1:
-            ficha.append(cubo["left"][1][2])
-        elif columna == 2 and fila == 1:
-            ficha.append(cubo["rigth"][1][0])
-        elif fila == 0 and columna == 0:
-            ficha.append(cubo["up"][2][0])
-            ficha.append(cubo["left"][0][2])
-        elif fila == 2 and columna == 0:
-            ficha.append(cubo["left"][2][2])
-            ficha.append(cubo["down"][0][0])
-        elif fila == 0 and columna == 2:
-            ficha.append(cubo["rigth"][0][0])
-            ficha.append(cubo["up"][2][2])
-        elif fila == 2 and columna == 2:
-            ficha.append(cubo["down"][0][2])
-            ficha.append(cubo["rigth"][2][0])
-    if cara == "rigth":
-        if columna == 1 and fila == 0:
-            ficha.append(cubo["up"][1][2])
-        elif columna == 1 and fila == 2:
-            ficha.append(cubo["down"][1][2])
-        elif columna == 0 and fila == 1:
-            ficha.append(cubo["front"][1][2])
-        elif columna == 2 and fila == 1:
-            ficha.append(cubo["back"][1][2])
-        elif fila == 0 and columna == 0:
-            ficha.append(cubo["up"][2][2])
-            ficha.append(cubo["front"][0][2])
-        elif fila == 2 and columna == 0:
-            ficha.append(cubo["front"][2][2])
-            ficha.append(cubo["down"][0][2])
-        elif fila == 0 and columna == 2:
-            ficha.append(cubo["back"][0][0])
-            ficha.append(cubo["up"][0][2])
-        elif fila == 2 and columna == 2:
-            ficha.append(cubo["down"][0][2])
-            ficha.append(cubo["back"][2][0])
-    if cara == "left":
-        if columna == 1 and fila == 0:
-            ficha.append(cubo["up"][1][0])
-        elif columna == 1 and fila == 2:
-            ficha.append(cubo["down"][1][0])
-        elif columna == 0 and fila == 1:
-            ficha.append(cubo["back"][1][2])
-        elif columna == 2 and fila == 1:
-            ficha.append(cubo["front"][1][2])
-        elif fila == 0 and columna == 0:
-            ficha.append(cubo["up"][0][0])
-            ficha.append(cubo["back"][0][2])
-        elif fila == 2 and columna == 0:
-            ficha.append(cubo["back"][2][2])
-            ficha.append(cubo["down"][2][0])
-        elif fila == 0 and columna == 2:
-            ficha.append(cubo["front"][0][0])
-            ficha.append(cubo["up"][2][0])
-        elif fila == 2 and columna == 2:
-            ficha.append(cubo["down"][0][0])
-            ficha.append(cubo["front"][2][0])
-    if cara == "back":
-        if columna == 1 and fila == 0:
-            ficha.append(cubo["up"][0][1])
-        elif columna == 1 and fila == 2:
-            ficha.append(cubo["down"][2][1])
-        elif columna == 0 and fila == 1:
-            ficha.append(cubo["rigth"][1][2])
-        elif columna == 2 and fila == 1:
-            ficha.append(cubo["left"][1][0])
-        elif fila == 0 and columna == 0:
-            ficha.append(cubo["up"][0][2])
-            ficha.append(cubo["rigth"][0][2])
-        elif fila == 2 and columna == 0:
-            ficha.append(cubo["rigth"][2][2])
-            ficha.append(cubo["down"][2][2])
-        elif fila == 0 and columna == 2:
-            ficha.append(cubo["left"][0][0])
-            ficha.append(cubo["up"][0][0])
-        elif fila == 2 and columna == 2:
-            ficha.append(cubo["down"][2][0])
-            ficha.append(cubo["left"][2][0])
-    if cara == "down":
-        if columna == 1 and fila == 0:
-            ficha.append(cubo["front"][2][1])
-        elif columna == 1 and fila == 2:
-            ficha.append(cubo["back"][2][1])
-        elif columna == 0 and fila == 1:
-            ficha.append(cubo["left"][2][1])
-        elif columna == 2 and fila == 1:
-            ficha.append(cubo["rigth"][2][1])
-        elif fila == 0 and columna == 0:
-            ficha.append(cubo["front"][2][0])
-            ficha.append(cubo["left"][2][2])
-        elif fila == 2 and columna == 0:
-            ficha.append(cubo["back"][2][2])
-            ficha.append(cubo["left"][2][0])
-        elif fila == 0 and columna == 2:
-            ficha.append(cubo["left"][2][0])
-            ficha.append(cubo["front"][2][2])
-        elif fila == 2 and columna == 2:
-            ficha.append(cubo["back"][2][0])
-            ficha.append(cubo["rigth"][2][2])
-    return ficha
-
-def armresto(cubo):
-    if cubo["front"][1][1]!=cubo["front"][0][1]:
-        U(cubo)
-        print("U")
-    print(fichalateral(cubo))
-    print(cruz_amarilla(cubo))
-    print(cruz_amarilla_bien(cubo))
-    print(esquinas(cubo))
-    print(esquinas_final(cubo))
-
-print(armresto(cubo))
+print(fichalateral(cubo))
+print(cruz_amarilla(cubo))
+print(cruz_amarilla_bien(cubo))
+print(esquinas(cubo))
+print(esquinas_final(cubo))
 pprint.pprint(cubo)
