@@ -1,0 +1,933 @@
+#Juan David Panadero y Maria Alejandra Leyton
+
+
+import random   #Se importan librerias
+import numpy as np
+tablero=[[2,2,2],   #Iniciamos una matriz para que sea nuestro tablero
+         [0,0,0],
+         [1,1,1]]
+print(tablero[0]),print(tablero[1]),print(tablero[2])   #Imprimimos el tablero
+print(
+    """ *****************BIENVENIDO*****************""")        #Les damos al usuario sus reglas y la bienvenida
+print(""" reglas de movimientos                 
+
+            los movimientos de los peones corresponden a los movimientos que puede hacer un peon regularmente en un juego de ajedrez:
+            -movimiento en diagonal una casilla, unicament epara comer una ficha del oponente
+            -movimiento al frente unicamente unna casilla
+
+            """)
+print(""" reglas para ganar
+
+            un jugador gana cuando:
+            -el jugador ha capturado todas las fichas del oponente
+            -una de sus fichas ha llegado al otro extremo del tablero
+            nota/ habrá un empate cuando ya no halla mas movimientos posible
+            """)
+jugadores = int(input("1 o 2 jugadores"))                       #Se le pide al usuario si va a jugar contra la maquina o van a jugar 2 usuarios
+def start_game(tablero,jugadores):                              #Inicializamos la funcion para comenzar el juego
+    if jugadores==2:                                            #Se evalua si el usuario ingreso para que jueguen 2 personas
+        if tablero[0][0]!=1 and tablero[0][1]!=1 and tablero[0][2]!=1 and tablero[2][0]!=2 and tablero[2][1]!=2 and tablero[2][2]!=2:   #Se evalua que el tablero este en su posicion incial
+            print("es turno de las blancas")                #Se imprime el turno de la persona que le toca
+            tablero = mov_blancas(tablero)                  #Se inicia la funcion de los movimientos posibles para las blancas
+            print(tablero[0]), print(tablero[1]), print(tablero[2])         #Imprime el nuevo tablero
+            if tablero[0][0] == 1 or tablero[0][1] == 1 or tablero[0][2] == 1:      #Se evalua si las blancas ganaron ya que cruzaron los peones todo el tablero
+                print("las fichas blancas han ganado")      #Imprime el mensaje
+            print("es turno de las negras")             #Si no, juegan las negras
+            tablero = mov_negros(tablero)                  #Inicia la funcion de los movimientos de las negras
+            print(tablero[0]), print(tablero[1]), print(tablero[2])         #Se imprime el nuevo tablero
+            return start_game(tablero,jugadores)        #Retorna nuevamente la funcion para volver a hacer todo
+        elif tablero[0][0]==1 or tablero[0][1]==1 or tablero[0][2]==1:
+            print("las fichas blancas han ganado")
+        elif tablero[2][0]==2 or tablero[2][1]==2 or tablero[2][2]==2:              #Se evalua si las negras ganaron
+            print("las fichas negras han ganado")
+    elif jugadores==1:      #En cambio si solo juega 1 jugador contra la maquina empieza otro proceso
+        if tablero[0][0] != 1 and tablero[0][1] != 1 and tablero[0][2] != 1 and tablero[2][0] != 2 and tablero[2][1] != 2 and tablero[2][2] != 2:     #Se evalua quien debe seguir
+            print("es turno de las negras")
+            tablero = mov_negros_IA(tablero)#Se inicia la funcion de las negras por parte de la maquina
+            print(tablero[0]), print(tablero[1]), print(tablero[2])
+            if tablero[2][0] == 2 or tablero[2][1] == 2 or tablero[2][2] == 2:  #Se evalua si las negras ganaron
+                print("las fichas negras han ganado")
+            print("es turno de las blancas")        #Si no las blancas juegas
+            tablero = mov_blancas(tablero)
+            print(tablero[0]), print(tablero[1]), print(tablero[2])
+            return start_game(tablero, jugadores)       #Retorna otra vez la funcion para que repita el proceso
+        elif tablero[0][0] == 1 or tablero[0][1] == 1 or tablero[0][2] == 1:    #Evalua si las blancas ganaron o las negras
+            print("las fichas blancas han ganado")
+        elif tablero[2][0] == 2 or tablero[2][1] == 2 or tablero[2][2] == 2:
+            print("las fichas negras han ganado")
+
+
+
+def mov_blancas(tablero):       #se inicia la funcion de la blancas quiere decir del primer jugador
+    peonesblancos = []          #Lista para evaluar las posiciones de los peones
+    for fila in range(0, 3):
+        for columna in range(0, 3):
+            if tablero[fila][columna] == 1:
+                peonesblancos.append(fila), peonesblancos.append(columna)       #Se agregan las posiciones de los peones
+    print(peonesblancos)
+    opciones = []       #Se inicia una lista de las opciones posibles de movimientos de las blancas
+    tablero_original = tablero      #Se añade el tablero
+    if len(peonesblancos)==0:       #Se evalua si no hay peones blancos para ver si las negras ganaron
+        return "las fichas negras han ganado"
+    elif len(peonesblancos) == 6:       #Se cuentan si estan todos los peones
+        if tablero_original[peonesblancos[0] - 1][peonesblancos[1]] == 0:   #Se evalua la posicion de los peones
+            tablero_nuevo1 = np.array(tablero_original)         #crea una lista con similar a el tablero original
+            tablero_nuevo1[peonesblancos[0] - 1][peonesblancos[1]] = 1      #cambia el valor en la posicion
+            tablero_nuevo1[peonesblancos[0]][peonesblancos[1]] = 0      #Actualiza el termino
+            print("opcion:")    #Se imprime la opcion
+            print(tablero_nuevo1[0]), print(tablero_nuevo1[1]), print(tablero_nuevo1[2])
+            op1 = tablero_nuevo1    #Se genera la opcion
+            opciones.append(op1)    #Se agrefa la opcion a la lista op1
+
+        if tablero_original[peonesblancos[2] - 1][peonesblancos[3]] == 0:       #Se repite el proceso con las otras opciones posibles
+            tablero_nuevo2 = np.array(tablero_original)
+            tablero_nuevo2[peonesblancos[2] - 1][peonesblancos[3]] = 1
+            tablero_nuevo2[peonesblancos[2]][peonesblancos[3]] = 0
+            print("opcion:")
+            print(tablero_nuevo2[0]), print(tablero_nuevo2[1]), print(tablero_nuevo2[2])
+            op2 = tablero_nuevo2
+            opciones.append(op2)
+
+        if tablero_original[peonesblancos[4] - 1][peonesblancos[5]] == 0:
+            tablero_nuevo3 = np.array(tablero_original)
+            tablero_nuevo3[peonesblancos[4] - 1][peonesblancos[5]] = 1
+            tablero_nuevo3[peonesblancos[4]][peonesblancos[5]] = 0
+            print("opcion:")
+            print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+            op3 = tablero_nuevo3
+            opciones.append(op3)
+
+
+        if peonesblancos[1] == 1:
+            if tablero_original[peonesblancos[0] - 1][peonesblancos[1] + 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[0] - 1][peonesblancos[1] + 1] = 1
+                tablero_nuevo3[peonesblancos[0]][peonesblancos[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesblancos[0] - 1][peonesblancos[1] - 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[0] - 1][peonesblancos[1] - 1] = 1
+                tablero_nuevo3[peonesblancos[0]][peonesblancos[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesblancos[1] == 0:
+            if tablero_original[peonesblancos[0] - 1][peonesblancos[1] + 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[0] - 1][peonesblancos[1] + 1] = 1
+                tablero_nuevo3[peonesblancos[0]][peonesblancos[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesblancos[1] == 2:
+            if tablero_original[peonesblancos[0] - 1][peonesblancos[1] - 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[0] - 1][peonesblancos[1] - 1] = 1
+                tablero_nuevo3[peonesblancos[0]][peonesblancos[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+        if peonesblancos[3] == 1:
+            if tablero_original[peonesblancos[2] - 1][peonesblancos[3] - 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[2] - 1][peonesblancos[3] - 1] = 1
+                tablero_nuevo3[peonesblancos[2]][peonesblancos[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesblancos[2] - 1][peonesblancos[3] + 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[2] - 1][peonesblancos[3] + 1] = 1
+                tablero_nuevo3[peonesblancos[2]][peonesblancos[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesblancos[3] == 0:
+            if tablero_original[peonesblancos[2] - 1][peonesblancos[3] + 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[2] - 1][peonesblancos[3] + 1] = 1
+                tablero_nuevo3[peonesblancos[2]][peonesblancos[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesblancos[3] == 2:
+            if tablero_original[peonesblancos[2] - 1][peonesblancos[3] - 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[2] - 1][peonesblancos[3] - 1] = 1
+                tablero_nuevo3[peonesblancos[2]][peonesblancos[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+
+        if peonesblancos[5] == 1:
+            if tablero_original[peonesblancos[4] - 1][peonesblancos[5] - 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[4] - 1][peonesblancos[5] - 1] = 1
+                tablero_nuevo3[peonesblancos[4]][peonesblancos[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesblancos[4] - 1][peonesblancos[5] + 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[4] - 1][peonesblancos[5] + 1] = 1
+                tablero_nuevo3[peonesblancos[4]][peonesblancos[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesblancos[5] == 1:
+            if tablero_original[peonesblancos[4] - 1][peonesblancos[5] + 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[4] - 1][peonesblancos[5] + 1] = 1
+                tablero_nuevo3[peonesblancos[4]][peonesblancos[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesblancos[5] == 2:
+            if tablero_original[peonesblancos[4] - 1][peonesblancos[5] - 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[4] - 1][peonesblancos[5] - 1] = 1
+                tablero_nuevo3[peonesblancos[4]][peonesblancos[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+    if len(peonesblancos) == 4: #Cuenta si hay 2 peones y vuelve a evaluar los posibles movimientos
+        if tablero_original[peonesblancos[0] - 1][peonesblancos[1]] == 0:
+            tablero_nuevo1 = np.array(tablero_original)
+            tablero_nuevo1[peonesblancos[0] - 1][peonesblancos[1]] = 1
+            tablero_nuevo1[peonesblancos[0]][peonesblancos[1]] = 0
+            print("opcion:")
+            print(tablero_nuevo1[0]), print(tablero_nuevo1[1]), print(tablero_nuevo1[2])
+            op1 = tablero_nuevo1
+            opciones.append(op1)
+
+        if tablero_original[peonesblancos[2] - 1][peonesblancos[3]] == 0:
+            tablero_nuevo2 = np.array(tablero_original)
+            tablero_nuevo2[peonesblancos[2] - 1][peonesblancos[3]] = 1
+            tablero_nuevo2[peonesblancos[2]][peonesblancos[3]] = 0
+            print("opcion:")
+            print(tablero_nuevo2[0]), print(tablero_nuevo2[1]), print(tablero_nuevo2[2])
+            op2 = tablero_nuevo2
+            opciones.append(op2)
+
+        if peonesblancos[1] == 1:
+            if tablero_original[peonesblancos[0] - 1][peonesblancos[1] + 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[0] - 1][peonesblancos[1] + 1] = 1
+                tablero_nuevo3[peonesblancos[0]][peonesblancos[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesblancos[0] - 1][peonesblancos[1] - 1] == 2:
+                tablero_nuevo4 = np.array(tablero_original)
+                tablero_nuevo4[peonesblancos[0] - 1][peonesblancos[1] - 1] = 1
+                tablero_nuevo4[peonesblancos[0]][peonesblancos[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo4[0]), print(tablero_nuevo4[1]), print(tablero_nuevo4[2])
+                op3 = tablero_nuevo4
+                opciones.append(op3)
+        elif peonesblancos[1] == 0:
+            if tablero_original[peonesblancos[0] - 1][peonesblancos[1] + 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[0] - 1][peonesblancos[1] + 1] = 1
+                tablero_nuevo3[peonesblancos[0]][peonesblancos[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesblancos[1] == 2:
+            if tablero_original[peonesblancos[0] - 1][peonesblancos[1] - 1] == 2:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesblancos[0] - 1][peonesblancos[1] - 1] = 1
+                tablero_nuevo3[peonesblancos[0]][peonesblancos[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+        if peonesblancos[3] == 1:
+            if tablero_original[peonesblancos[2] - 1][peonesblancos[3] - 1] == 2:
+                tablero_nuevo5 = np.array(tablero_original)
+                tablero_nuevo5[peonesblancos[2] - 1][peonesblancos[3] - 1] = 1
+                tablero_nuevo5[peonesblancos[2]][peonesblancos[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo5[0]), print(tablero_nuevo5[1]), print(tablero_nuevo5[2])
+                op3 = tablero_nuevo5
+                opciones.append(op3)
+            if tablero_original[peonesblancos[2] - 1][peonesblancos[3] + 1] == 2:
+                tablero_nuevo6 = np.array(tablero_original)
+                tablero_nuevo6[peonesblancos[2] - 1][peonesblancos[3] + 1] = 1
+                tablero_nuevo6[peonesblancos[2]][peonesblancos[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo6[0]), print(tablero_nuevo6[1]), print(tablero_nuevo6[2])
+                op3 = tablero_nuevo6
+                opciones.append(op3)
+        elif peonesblancos[3] == 0:
+            if tablero_original[peonesblancos[2] - 1][peonesblancos[3] + 1] == 2:
+                tablero_nuevo5 = np.array(tablero_original)
+                tablero_nuevo5[peonesblancos[2] - 1][peonesblancos[3] + 1] = 1
+                tablero_nuevo5[peonesblancos[2]][peonesblancos[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo5[0]), print(tablero_nuevo5[1]), print(tablero_nuevo5[2])
+                op3 = tablero_nuevo5
+                opciones.append(op3)
+        elif peonesblancos[3] == 2:
+            if tablero_original[peonesblancos[2] - 1][peonesblancos[3] - 1] == 2:
+                tablero_nuevo5 = np.array(tablero_original)
+                tablero_nuevo5[peonesblancos[2] - 1][peonesblancos[3] - 1] = 1
+                tablero_nuevo5[peonesblancos[2]][peonesblancos[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo5[0]), print(tablero_nuevo5[1]), print(tablero_nuevo5[2])
+                op3 = tablero_nuevo5
+                opciones.append(op3)
+
+
+
+
+    if len(peonesblancos) == 2:     #evalua si solo hay un peon y los posibles movimientos de este
+        if tablero_original[peonesblancos[0] - 1][peonesblancos[1]] == 0:
+            tablero_nuevo1 = np.array(tablero_original)
+            tablero_nuevo1[peonesblancos[0] - 1][peonesblancos[1]] = 1
+            tablero_nuevo1[peonesblancos[0]][peonesblancos[1]] = 0
+            print("opcion:")
+            print(tablero_nuevo1[0]), print(tablero_nuevo1[1]), print(tablero_nuevo1[2])
+            op1 = tablero_nuevo1
+            opciones.append(op1)
+
+    if peonesblancos[1] == 1:
+        if tablero_original[peonesblancos[0] - 1][peonesblancos[1] + 1] == 2:
+            tablero_nuevo3 = np.array(tablero_original)
+            tablero_nuevo3[peonesblancos[0] - 1][peonesblancos[1] + 1] = 1
+            tablero_nuevo3[peonesblancos[0]][peonesblancos[1]] = 0
+            print("opcion:")
+            print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+            op3 = tablero_nuevo3
+            opciones.append(op3)
+        if tablero_original[peonesblancos[0] - 1][peonesblancos[1] - 1] == 2:
+            tablero_nuevo4 = np.array(tablero_original)
+            tablero_nuevo4[peonesblancos[0] - 1][peonesblancos[1] - 1] = 1
+            tablero_nuevo4[peonesblancos[0]][peonesblancos[1]] = 0
+            print("opcion:")
+            print(tablero_nuevo4[0]), print(tablero_nuevo4[1]), print(tablero_nuevo4[2])
+            op3 = tablero_nuevo4
+            opciones.append(op3)
+    elif peonesblancos[1] == 0:
+        if tablero_original[peonesblancos[0] - 1][peonesblancos[1] + 1] == 2:
+            tablero_nuevo3 = np.array(tablero_original)
+            tablero_nuevo3[peonesblancos[0] - 1][peonesblancos[1] + 1] = 1
+            tablero_nuevo3[peonesblancos[0]][peonesblancos[1]] = 0
+            print("opcion:")
+            print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+            op3 = tablero_nuevo3
+            opciones.append(op3)
+    elif peonesblancos[1] == 2:
+        if tablero_original[peonesblancos[0] - 1][peonesblancos[1] - 1] == 2:
+            tablero_nuevo3 = np.array(tablero_original)
+            tablero_nuevo3[peonesblancos[0] - 1][peonesblancos[1] - 1] = 1
+            tablero_nuevo3[peonesblancos[0]][peonesblancos[1]] = 0
+            print("opcion:")
+            print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+            op3 = tablero_nuevo3
+            opciones.append(op3)
+    if len(opciones)==0:    #Si no hay opciones posibles que arroje q es un empate
+        print("empateeee")
+    movimientochoose = int(input("que movimiento deseas: "))        #Que ingrese cual de todos los posibles movimientos desea
+    movimiento = opciones[movimientochoose - 1]         #Quita la opcion que seleccionamos
+    return movimiento       #Retorna el movimiento realizado
+
+def mov_negros(tablero):        #Se inicia la funcion de los movimientos negros realizados por el otro jugador
+    peonesnegros = []       #Se inicia una lista para almacenar las posiciones de los peones
+    for fila in range(0, 3):        #Se inicia unos bucles para buscar los peones
+        for columna in range(0, 3):
+            if tablero[fila][columna] == 2:
+                peonesnegros.append(fila), peonesnegros.append(columna)     #Al encontrarlos almacena las posiciones de la columna y la fila en la lista
+    print(peonesnegros)     #Imprime la lista
+    opciones = []       #Una lista donde se van a almacenar con todas las opciones posibles
+    tablero_original = tablero      #Se crea un tablero igual al original para las opciones
+    if len(peonesnegros)==0:    #Si no hay ningun peon
+        return "las fichas blancas han ganado"      #Ganan las blancas
+    elif len(peonesnegros) == 6:        #Si hay 3 peones va a evaluar los posibles movimientos
+        if tablero_original[peonesnegros[0] + 1][peonesnegros[1]] == 0:         #si no hay nada en esa pocicion
+            tablero_nuevo1 = np.array(tablero_original)     #Crea una matriz nueva
+            tablero_nuevo1[peonesnegros[0] + 1][peonesnegros[1]] = 2    #cambia la posicion
+            tablero_nuevo1[peonesnegros[0]][peonesnegros[1]] = 0        #y la combierte en 0
+            print("opcion:")    #imprime la opcion
+            print(tablero_nuevo1[0]), print(tablero_nuevo1[1]), print(tablero_nuevo1[2])
+            op1 = tablero_nuevo1    #Se almacena la opcion en una variable
+            opciones.append(op1)    #Se guarda en la lista la opcion
+
+        if tablero_original[peonesnegros[2] + 1][peonesnegros[3]] == 0: #Se repite el proceso para una opcion distinta en cada bucle
+            tablero_nuevo2 = np.array(tablero_original)
+            tablero_nuevo2[peonesnegros[2] + 1][peonesnegros[3]] = 2
+            tablero_nuevo2[peonesnegros[2]][peonesnegros[3]] = 0
+            print("opcion:")
+            print(tablero_nuevo2[0]), print(tablero_nuevo2[1]), print(tablero_nuevo2[2])
+            op2 = tablero_nuevo2
+            opciones.append(op2)
+
+        if tablero_original[peonesnegros[4] + 1][peonesnegros[5]] == 0:
+            tablero_nuevo3 = np.array(tablero_original)
+            tablero_nuevo3[peonesnegros[4] + 1][peonesnegros[5]] = 2
+            tablero_nuevo3[peonesnegros[4]][peonesnegros[5]] = 0
+            print("opcion:")
+            print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+            op3 = tablero_nuevo3
+            opciones.append(op3)
+
+        if peonesnegros[1] == 1:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[1] == 0:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[1] == 2:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+        if peonesnegros[3] == 1:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[2] + 1][peonesnegros[3] - 1] = 2
+                tablero_nuevo3[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[2] + 1][peonesnegros[3] + 1] = 2
+                tablero_nuevo3[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[3] == 0:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[2] + 1][peonesnegros[3] + 1] = 2
+                tablero_nuevo3[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[3] == 2:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[2] + 1][peonesnegros[3] - 1] = 2
+                tablero_nuevo3[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+        if peonesnegros[5] == 1:
+            if tablero_original[peonesnegros[4] + 1][peonesnegros[5] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[4] + 1][peonesnegros[5] - 1] = 2
+                tablero_nuevo3[peonesnegros[4]][peonesnegros[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesnegros[4] + 1][peonesnegros[5] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[4] + 1][peonesnegros[5] + 1] = 2
+                tablero_nuevo3[peonesnegros[4]][peonesnegros[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[5] == 1:
+            if tablero_original[peonesnegros[4] + 1][peonesnegros[5] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[4] + 1][peonesnegros[5] + 1] = 2
+                tablero_nuevo3[peonesnegros[4]][peonesnegros[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[5] == 2:
+            if tablero_original[peonesnegros[4] + 1][peonesnegros[5] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[4] + 1][peonesnegros[5] - 1] = 2
+                tablero_nuevo3[peonesnegros[4]][peonesnegros[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+    if len(peonesnegros) == 4:  #Se repite el proceso para 2 peones
+        if tablero_original[peonesnegros[0] + 1][peonesnegros[1]] == 0:
+            tablero_nuevo1 = np.array(tablero_original)
+            tablero_nuevo1[peonesnegros[0] + 1][peonesnegros[1]] = 2
+            tablero_nuevo1[peonesnegros[0]][peonesnegros[1]] = 0
+            print("opcion:")
+            print(tablero_nuevo1[0]), print(tablero_nuevo1[1]), print(tablero_nuevo1[2])
+            op1 = tablero_nuevo1
+            opciones.append(op1)
+
+        if tablero_original[peonesnegros[2] + 1][peonesnegros[3]] == 0:
+            tablero_nuevo2 = np.array(tablero_original)
+            tablero_nuevo2[peonesnegros[2] + 1][peonesnegros[3]] = 2
+            tablero_nuevo2[peonesnegros[2]][peonesnegros[3]] = 0
+            print("opcion:")
+            print(tablero_nuevo2[0]), print(tablero_nuevo2[1]), print(tablero_nuevo2[2])
+            op2 = tablero_nuevo2
+            opciones.append(op2)
+
+        if peonesnegros[1] == 1:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo4 = np.array(tablero_original)
+                tablero_nuevo4[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo4[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo4[0]), print(tablero_nuevo4[1]), print(tablero_nuevo4[2])
+                op3 = tablero_nuevo4
+                opciones.append(op3)
+        elif peonesnegros[1] == 0:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[1] == 2:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+        if peonesnegros[3] == 1:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] - 1] == 1:
+                tablero_nuevo5 = np.array(tablero_original)
+                tablero_nuevo5[peonesnegros[2] + 1][peonesnegros[3] - 1] = 2
+                tablero_nuevo5[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo5[0]), print(tablero_nuevo5[1]), print(tablero_nuevo5[2])
+                op3 = tablero_nuevo5
+                opciones.append(op3)
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] + 1] == 1:
+                tablero_nuevo6 = np.array(tablero_original)
+                tablero_nuevo6[peonesnegros[2] + 1][peonesnegros[3] + 1] = 2
+                tablero_nuevo6[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo6[0]), print(tablero_nuevo6[1]), print(tablero_nuevo6[2])
+                op3 = tablero_nuevo6
+                opciones.append(op3)
+        elif peonesnegros[3] == 0:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] + 1] == 1:
+                tablero_nuevo5 = np.array(tablero_original)
+                tablero_nuevo5[peonesnegros[2] + 1][peonesnegros[3] + 1] = 2
+                tablero_nuevo5[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo5[0]), print(tablero_nuevo5[1]), print(tablero_nuevo5[2])
+                op3 = tablero_nuevo5
+                opciones.append(op3)
+        elif peonesnegros[3] == 2:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] - 1] == 1:
+                tablero_nuevo5 = np.array(tablero_original)
+                tablero_nuevo5[peonesnegros[2] + 1][peonesnegros[3] - 1] = 2
+                tablero_nuevo5[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo5[0]), print(tablero_nuevo5[1]), print(tablero_nuevo5[2])
+                op3 = tablero_nuevo5
+                opciones.append(op3)
+
+    if len(peonesnegros) == 2:      #Se repite para si solo hay 1 peon
+        if tablero_original[peonesnegros[0] + 1][peonesnegros[1]] == 0:
+            tablero_nuevo1 = np.array(tablero_original)
+            tablero_nuevo1[peonesnegros[0] + 1][peonesnegros[1]] = 2
+            tablero_nuevo1[peonesnegros[0]][peonesnegros[1]] = 0
+            print("opcion:")
+            print(tablero_nuevo1[0]), print(tablero_nuevo1[1]), print(tablero_nuevo1[2])
+            op1 = tablero_nuevo1
+            opciones.append(op1)
+        if peonesnegros[1] == 1:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo2 = np.array(tablero_original)
+                tablero_nuevo2[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo2[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo2[0]), print(tablero_nuevo2[1]), print(tablero_nuevo2[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[1] == 0:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[1] == 2:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+    if len(opciones)==0:    #Si no se generan opciones imprime empate
+        print("empateeee")
+    movimientochoose = int(input("que movimiento deseas: "))    #Se inicia para ingresar el numero del movimiento posible
+    movimiento = opciones[movimientochoose - 1]     #Se le resta a la lista de opciones
+    return movimiento   #Retorna el movimiento
+
+def mov_negros_IA(tablero):     #funcion para los movimientos de la maquina
+    peonesnegros = []
+    for fila in range(0, 3):
+        for columna in range(0, 3):
+            if tablero[fila][columna] == 2:
+                peonesnegros.append(fila), peonesnegros.append(columna)
+    print(peonesnegros)
+    opciones = []
+    tablero_original = tablero
+    if len(peonesnegros) == 6:
+        if tablero_original[peonesnegros[0] + 1][peonesnegros[1]] == 0:
+            tablero_nuevo1 = np.array(tablero_original)
+            tablero_nuevo1[peonesnegros[0] + 1][peonesnegros[1]] = 2
+            tablero_nuevo1[peonesnegros[0]][peonesnegros[1]] = 0
+            print("opcion:")
+            print(tablero_nuevo1[0]), print(tablero_nuevo1[1]), print(tablero_nuevo1[2])
+            op1 = tablero_nuevo1
+            opciones.append(op1)
+
+        if tablero_original[peonesnegros[2] + 1][peonesnegros[3]] == 0:
+            tablero_nuevo2 = np.array(tablero_original)
+            tablero_nuevo2[peonesnegros[2] + 1][peonesnegros[3]] = 2
+            tablero_nuevo2[peonesnegros[2]][peonesnegros[3]] = 0
+            print("opcion:")
+            print(tablero_nuevo2[0]), print(tablero_nuevo2[1]), print(tablero_nuevo2[2])
+            op2 = tablero_nuevo2
+            opciones.append(op2)
+
+        if tablero_original[peonesnegros[4] + 1][peonesnegros[5]] == 0:
+            tablero_nuevo3 = np.array(tablero_original)
+            tablero_nuevo3[peonesnegros[4] + 1][peonesnegros[5]] = 2
+            tablero_nuevo3[peonesnegros[4]][peonesnegros[5]] = 0
+            print("opcion:")
+            print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+            op3 = tablero_nuevo3
+            opciones.append(op3)
+
+        if peonesnegros[1] == 1:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[1] == 0:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[1] == 2:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+        if peonesnegros[3] == 1:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[2] + 1][peonesnegros[3] - 1] = 2
+                tablero_nuevo3[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[2] + 1][peonesnegros[3] + 1] = 2
+                tablero_nuevo3[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[3] == 0:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[2] + 1][peonesnegros[3] + 1] = 2
+                tablero_nuevo3[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[3] == 2:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[2] + 1][peonesnegros[3] - 1] = 2
+                tablero_nuevo3[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+        if peonesnegros[5] == 1:
+            if tablero_original[peonesnegros[4] + 1][peonesnegros[5] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[4] + 1][peonesnegros[5] - 1] = 2
+                tablero_nuevo3[peonesnegros[4]][peonesnegros[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesnegros[4] + 1][peonesnegros[5] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[4] + 1][peonesnegros[5] + 1] = 2
+                tablero_nuevo3[peonesnegros[4]][peonesnegros[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[5] == 1:
+            if tablero_original[peonesnegros[4] + 1][peonesnegros[5] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[4] + 1][peonesnegros[5] + 1] = 2
+                tablero_nuevo3[peonesnegros[4]][peonesnegros[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[5] == 2:
+            if tablero_original[peonesnegros[4] + 1][peonesnegros[5] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[4] + 1][peonesnegros[5] - 1] = 2
+                tablero_nuevo3[peonesnegros[4]][peonesnegros[5]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+    if len(peonesnegros) == 4:
+        if tablero_original[peonesnegros[0] + 1][peonesnegros[1]] == 0:
+            tablero_nuevo1 = np.array(tablero_original)
+            tablero_nuevo1[peonesnegros[0] + 1][peonesnegros[1]] = 2
+            tablero_nuevo1[peonesnegros[0]][peonesnegros[1]] = 0
+            print("opcion:")
+            print(tablero_nuevo1[0]), print(tablero_nuevo1[1]), print(tablero_nuevo1[2])
+            op1 = tablero_nuevo1
+            opciones.append(op1)
+
+        if tablero_original[peonesnegros[2] + 1][peonesnegros[3]] == 0:
+            tablero_nuevo2 = np.array(tablero_original)
+            tablero_nuevo2[peonesnegros[2] + 1][peonesnegros[3]] = 2
+            tablero_nuevo2[peonesnegros[2]][peonesnegros[3]] = 0
+            print("opcion:")
+            print(tablero_nuevo2[0]), print(tablero_nuevo2[1]), print(tablero_nuevo2[2])
+            op2 = tablero_nuevo2
+            opciones.append(op2)
+
+        if peonesnegros[1] == 1:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo4 = np.array(tablero_original)
+                tablero_nuevo4[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo4[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo4[0]), print(tablero_nuevo4[1]), print(tablero_nuevo4[2])
+                op3 = tablero_nuevo4
+                opciones.append(op3)
+        elif peonesnegros[1] == 0:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[1] == 2:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+        if peonesnegros[3] == 1:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] - 1] == 1:
+                tablero_nuevo5 = np.array(tablero_original)
+                tablero_nuevo5[peonesnegros[2] + 1][peonesnegros[3] - 1] = 2
+                tablero_nuevo5[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo5[0]), print(tablero_nuevo5[1]), print(tablero_nuevo5[2])
+                op3 = tablero_nuevo5
+                opciones.append(op3)
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] + 1] == 1:
+                tablero_nuevo6 = np.array(tablero_original)
+                tablero_nuevo6[peonesnegros[2] + 1][peonesnegros[3] + 1] = 2
+                tablero_nuevo6[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo6[0]), print(tablero_nuevo6[1]), print(tablero_nuevo6[2])
+                op3 = tablero_nuevo6
+                opciones.append(op3)
+        elif peonesnegros[3] == 0:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] + 1] == 1:
+                tablero_nuevo5 = np.array(tablero_original)
+                tablero_nuevo5[peonesnegros[2] + 1][peonesnegros[3] + 1] = 2
+                tablero_nuevo5[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo5[0]), print(tablero_nuevo5[1]), print(tablero_nuevo5[2])
+                op3 = tablero_nuevo5
+                opciones.append(op3)
+        elif peonesnegros[3] == 2:
+            if tablero_original[peonesnegros[2] + 1][peonesnegros[3] - 1] == 1:
+                tablero_nuevo5 = np.array(tablero_original)
+                tablero_nuevo5[peonesnegros[2] + 1][peonesnegros[3] - 1] = 2
+                tablero_nuevo5[peonesnegros[2]][peonesnegros[3]] = 0
+                print("opcion:")
+                print(tablero_nuevo5[0]), print(tablero_nuevo5[1]), print(tablero_nuevo5[2])
+                op3 = tablero_nuevo5
+                opciones.append(op3)
+
+    if len(peonesnegros) == 2:
+        if tablero_original[peonesnegros[0] + 1][peonesnegros[1]] == 0:
+            tablero_nuevo1 = np.array(tablero_original)
+            tablero_nuevo1[peonesnegros[0] + 1][peonesnegros[1]] = 2
+            tablero_nuevo1[peonesnegros[0]][peonesnegros[1]] = 0
+            print("opcion:")
+            print(tablero_nuevo1[0]), print(tablero_nuevo1[1]), print(tablero_nuevo1[2])
+            op1 = tablero_nuevo1
+            opciones.append(op1)
+        if peonesnegros[1] == 1:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo2 = np.array(tablero_original)
+                tablero_nuevo2[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo2[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo2[0]), print(tablero_nuevo2[1]), print(tablero_nuevo2[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[1] == 0:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] + 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] + 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+        elif peonesnegros[1] == 2:
+            if tablero_original[peonesnegros[0] + 1][peonesnegros[1] - 1] == 1:
+                tablero_nuevo3 = np.array(tablero_original)
+                tablero_nuevo3[peonesnegros[0] + 1][peonesnegros[1] - 1] = 2
+                tablero_nuevo3[peonesnegros[0]][peonesnegros[1]] = 0
+                print("opcion:")
+                print(tablero_nuevo3[0]), print(tablero_nuevo3[1]), print(tablero_nuevo3[2])
+                op3 = tablero_nuevo3
+                opciones.append(op3)
+
+    if len(opciones) == 0:
+        print("empateeee")
+
+    else:
+        movimiento=random.choice(opciones)  #Elije la opcion aleatoriamente para seguir jugando
+        print("el movimiento final es: ")   #Imprime el movimiento
+
+    return movimiento
+
+print(start_game(tablero,jugadores))    #Imprime todo
